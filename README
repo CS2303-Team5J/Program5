@@ -1,0 +1,89 @@
+Lab 5 Readme
+
+Jacob Watson (JRWatson@wpi.edu), Erik Nadel (EINadel@wpi.edu) - Team 5J
+
+--------
+
+
+
+Build Instructions
+
+--------
+
+expand the tar file into a empty directory, then type:
+
+make (return)
+
+To execute the program type:
+
+./Lab5 (return)
+
+
+
+How it works:
+
+--------
+
+        This program is split into several different classes, which each handle one aspect of the packets trip fro\
+
+m the host to the reciever. The host class handles the tasks of S1 and S2. Router handles the actions of M1 and M2\
+
+. Reciever handles the actions of R1. FCFSqueue and queueNode handle the tasks of the send queue for the routers. \
+
+EventList and EventNode handle the eventlists interactions with the other classes. All of the classes except for t\
+
+he ones for the eventlist and queue have cycle methods, which handle the actions of that structure for one simulat\
+
+ed second cycle.
+
+        The program begins by setting the simluated time to zero. It then intitalizes two instances of host to rep\
+
+resent S1 and S2. These classes are passed their assigned packets by a individual for loop. The program then inita\
+
+lizes the variable numPackets to 200. This variable keeps track of the total number of packets that need to be pro\
+
+cessed. The next step is the intialization of two instances of Router, to represent M1 and M2 repectively, and one\
+
+ instance of Receiver to represent R1. The program then uses a while loop, controlled by checking to see if the nu\
+
+mber of packets recieved by R1 is equal to the total number of packets (as represented by numPackets), to call the\
+
+ cycle methods for S1, S2, M1, and M2. Each iteration of the while loop represents one second of simulated time, a\
+
+nd each methods cycle call within the loop represents that structures actions during that one second. Once R1 has \
+
+received all the packets, the loop terminates, and the program moves on to the results stage. Here the program pri\
+
+nts out the Sim time at the end, the max queues of M1 and M2, and the average packet respnce time. The program the\
+
+n terminates.
+
+
+
+
+
+Notes:
+
+--------
+
+Packets are tested using packets of size one hundred through two hundred.
+
+The eventlist acts more as a eventlog, as we do not remove anything from the event list, but instead add additiona\
+
+l events to the list as they occur. The lab5swimlane.png is a flowchart of how the program works. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
