@@ -12,7 +12,7 @@ namespace EIN_JRW_Lab5
 		EventNode(Packet p) { data = p; nodeLink = NULL;}
 		// Modification function
 		EventNode*& link() { return nodeLink; } // Get the link of the node
-		Packet getData() {return data;} // get the data of the node\
+		Packet getData() {return data;} // get the data of the node
 	private:
 		Packet data;
 		EventNode* nodeLink;

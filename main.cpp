@@ -14,7 +14,7 @@ int main()
     EventList global;
     Host S1(&global);
     Host S2(&global);
-    for(int x = 0; x < 100; ++x) // Fill host 1 with 100 packets of size (0-99) 
+    for(int x = 0; x < 100; ++x) // Fill host 1 with 100 packets of size (0-99)
     {
         Packet p(x,"S1",ARRIVED);
         S1.addPacket(p);
