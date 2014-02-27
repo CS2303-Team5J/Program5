@@ -3,13 +3,14 @@
 #include "packet.h"
 #include "eventlist.h"
 #include "eventnode.h"
+#include "grid.h"
 #include <iostream>
 #include <string>
 
 namespace EIN_JRW_Prog5
 {
 
-  Router::Router(EventList* e, std::string name, int id)
+  Router::Router(EventList* e, std::string name, int id,Grid* g)
   {
     events = e;
     maxQueueSize = 0;
@@ -18,6 +19,8 @@ namespace EIN_JRW_Prog5
     this->routerID = id;
 
     this->rDir = directionBasedOnID(id);
+
+    simGrid = g;
 
   }
 
@@ -82,7 +85,6 @@ namespace EIN_JRW_Prog5
                 delete temp;
             }
         }
-
   }
   void Router::cycle(int simTime, Receiver* r,int trans, int prop)
   {
@@ -118,7 +120,12 @@ namespace EIN_JRW_Prog5
             }
         }
 
+       if(simTime % 10 == 0 && simTime != 0)
+            simGrid->moveRouter(this);
+
+
   }
+
 
   void Router::setDirection(Direction dir)
   {

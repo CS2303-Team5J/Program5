@@ -30,9 +30,9 @@ int main()
 
     int numPackets = 400;
     // Create the routers / receiver
-    Router *M1 = new Router(&global,"M1",1);
-    Router *M2 = new Router(&global,"M2",2);
-    Router *M3 = new Router(&global,"M3",3);
+    Router *M1 = new Router(&global,"M1",1,&routerGrid);
+    Router *M2 = new Router(&global,"M2",2,&routerGrid);
+    Router *M3 = new Router(&global,"M3",3,&routerGrid);
     Receiver *R1 = new Receiver();
 
 //while(R1->getNumPacketsReceived() != numPackets) // Run the cycle until the host gets all the packets
@@ -50,13 +50,15 @@ int main()
 //
 //    currentSimTime++;
 //}
-
     routerGrid.addRouter(M1);
     routerGrid.print();
-    cout << "M1 is at " << M1->getLocation().GetxCoord() << " " << M1->getLocation().GetyCoord() << endl;
+while(true)
+{
     routerGrid.moveRouter(M1);
+    cout << "M1 is at " << M1->getLocation().GetxCoord() << " " << M1->getLocation().GetyCoord() << endl;
     routerGrid.print();
-
+    currentSimTime++;
+}
 
     //global.printEventList();
 

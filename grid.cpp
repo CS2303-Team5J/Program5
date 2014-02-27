@@ -91,7 +91,7 @@ namespace EIN_JRW_Prog5
         }
 
         // emptyspaces are immediately replaced.
-        if(!isOccupied(next))
+        else if(!isOccupied(next))
         {
             // Replace the space with the router moving.
             int temp = idGrid[cur.GetxCoord()][cur.GetyCoord()];
@@ -100,6 +100,7 @@ namespace EIN_JRW_Prog5
             // Update the routers's current position.
             r->setLocation(next);
             //printf("Moved %d\n", p->playerNum);
+            return;
         }
         // handle a router space
         else if(isOccupied(next))

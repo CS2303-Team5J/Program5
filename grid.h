@@ -4,6 +4,7 @@
 #include "router.h"
 namespace EIN_JRW_Prog5
 {
+    class Router;
     class Grid
     {
         public:

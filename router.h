@@ -6,15 +6,16 @@
 #include "router.h"
 #include "eventlist.h"
 #include "location.h"
+#include "grid.h"
 #include <string>
 namespace EIN_JRW_Prog5
 {
-
+class Grid;
 class Router
 {
  public:
   // Constructor
-  Router(EventList* e, std::string name, int id);
+  Router(EventList* e, std::string name, int id,Grid* g);
 	// Send the packet
   void sendPacket(int simTime, int trans, int prop);
 	// Receive a packet
@@ -37,7 +38,6 @@ class Router
  private:
 
   Direction directionBasedOnID(int id);
-
   FCFSqueue packetQueue;
   EventList *events;
   Packet *packetBeingSent;
@@ -49,6 +49,7 @@ class Router
   std::string name;
   Direction rDir;
   int routerID;
+  Grid *simGrid;
 };
 }
 #endif
