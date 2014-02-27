@@ -4,7 +4,7 @@
 #include "packet.h"
 
 
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
   class QueueNode{ //this class makes up the contents of the queue and holds the packets within it
   public:

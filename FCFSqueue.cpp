@@ -1,7 +1,7 @@
 // Author: Jacob Watson (jrwatson@wpi.edu) (entire file)
 #include "FCFSqueue.h"
 #include <iostream>
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
 	void FCFSqueue::enqueue(Packet p)
 	{

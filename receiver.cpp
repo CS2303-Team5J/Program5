@@ -6,26 +6,26 @@
 #include "eventnode.h"
 
 
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
 	Receiver::Receiver()
 	{
-	        numPacketsReceived = 0;
+        numPacketsReceived = 0;
 		totalResponseTime = 0;
 	}
 
 	void Receiver::receivePacket(Packet p, int simTime,EventList* events)
 	{
 		p.setState(PROPAGATED,simTime); // The packet is at the router (it was propegated)
-		events->addModifiedEvent(p); 
+		events->addModifiedEvent(p);
 		p.setState(DELIVERED,simTime); // This means that the router was also delivered
 		p.setReceived(simTime); // Set the received time
-		events->addModifiedEvent(p); // Add to the event list 
+		events->addModifiedEvent(p); // Add to the event list
 		numPacketsReceived++;
 		printPacketStatistics(p);
 		totalResponseTime += p.getResponseTime();
 	}
-	
+
 	void Receiver::printPacketStatistics(Packet p)
 	{
 		std::cout << "Packet from " << p.getSource() << std::endl;

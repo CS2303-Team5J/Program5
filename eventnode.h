@@ -3,7 +3,7 @@
 #define EVENTNODE_H
 #include "packet.h"
 
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
 	class EventNode
 	{

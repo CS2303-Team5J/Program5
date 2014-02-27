@@ -3,7 +3,7 @@
 #include <vector>
 #include "router.h"
 #include "eventlist.h"
-namespace EIN_JRW_Lab5{
+namespace EIN_JRW_Prog5{
   class Host
   {
   public:
@@ -15,11 +15,11 @@ namespace EIN_JRW_Lab5{
     void cycle(int simTime, Router* r, int trans,int prop); // perform a cycle
 
   private:
-    std::vector<Packet> packets; // list of packets that the host will send 
+    std::vector<Packet> packets; // list of packets that the host will send
     EventList *events; // event list that the host writes to
     int sendTimeRem; // time remaining for the packet being sent
     int sendTime; // time originally set to send (for transmission calculation)
-    bool hasTransmitted; // boolean for whether the packet has transmitted 
+    bool hasTransmitted; // boolean for whether the packet has transmitted
     Packet *packetBeingSent; // point to the packet currently being sent
   };
 }

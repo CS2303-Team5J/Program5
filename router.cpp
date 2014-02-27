@@ -3,11 +3,28 @@
 #include "packet.h"
 #include "eventlist.h"
 #include "eventnode.h"
+#include "grid.h"
 #include <iostream>
 #include <string>
 
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
+
+  Router::Router(EventList* e, std::string name, int id,Grid* g)
+  {
+    events = e;
+    maxQueueSize = 0;
+    this->name = name;
+    packetBeingSent = NULL;
+    this->nodeID = id;
+
+    this->rDir = directionBasedOnID(id);
+
+    simGrid = g;
+
+  }
+
+
   // Send the next packet in queue to a router
   void Router::sendPacket(int simTime,int trans, int prop)
   {
@@ -17,18 +34,21 @@ namespace EIN_JRW_Lab5
     packetBeingSent = new Packet();
     hasTransmitted = false;
     *packetBeingSent = p;
+    std::cout << packetQueue.sizeOf() << std::endl;
+
+
     //r->receivePacket(p,events,simTime);
   }
   // Receive a packet
   void Router::receivePacket(Packet p,int simTime)
   {
-    	p.setState(PROPAGATED,simTime); // A packet received means it has been propagated
-    	events->addModifiedEvent(p);
+    p.setState(PROPAGATED,simTime); // A packet received means it has been propagated
+    events->addModifiedEvent(p);
 	packetQueue.enqueue(p);
 	p.setState(RECIEVED,simTime); // It has also been received (implied)
 	events->addModifiedEvent(p);
-	//    std::cout << name << ": "; // print the packet name for debugging
-	//    packetQueue.printQueue();
+    //std::cout << name << ": "; // print the packet name for debugging
+    //packetQueue.printQueue();
 
   }
   void Router::cycle(int simTime, Router* r,int trans, int prop)
@@ -46,9 +66,9 @@ namespace EIN_JRW_Lab5
                 sendPacket(simTime,trans,prop);
             }
         }
-        else if(packetBeingSent != NULL) // Is there a packet being sent?
+        if(packetBeingSent != NULL) // Is there a packet being sent?
         {
-            sendTimeRem--; 
+            sendTimeRem--;
 
             if(sendTimeRem <= sendTime-trans && !hasTransmitted) // Has the packet transmitted?
             {
@@ -65,11 +85,10 @@ namespace EIN_JRW_Lab5
                 delete temp;
             }
         }
-
   }
   void Router::cycle(int simTime, Receiver* r,int trans, int prop)
   {
-	// Same as before. except this is a cycle to send to a receiver. 
+	// Same as before. except this is a cycle to send to a receiver.
 
         if(packetQueue.sizeOf() > maxQueueSize)
         {
@@ -101,5 +120,54 @@ namespace EIN_JRW_Lab5
             }
         }
 
+       if(simTime % 10 == 0 && simTime != 0)
+            simGrid->moveRouter(this);
+
+
   }
+
+
+  void Router::setDirection(Direction dir)
+  {
+        this->rDir = dir;
+  }
+
+  void Router::setLocation(location newLoc)
+  {
+        this->routerLoc = newLoc;
+  }
+
+  Direction Router::getDirection()
+  {
+        return this->rDir;
+  }
+
+  location Router::getLocation()
+  {
+        return this->routerLoc;
+  }
+
+  int Router::getID()
+  {
+        return this->nodeID;
+  }
+
+
+  Direction Router::directionBasedOnID(int id)
+  {
+        int direction = id % 4;
+        switch (direction)
+        {
+            case 0:
+                return NORTH;
+            case 1:
+                return EAST;
+            case 2:
+                return SOUTH;
+            case 3:
+                return WEST;
+        }
+        return NORTH;
+  }
+
 }
