@@ -7,11 +7,13 @@
 #include "eventlist.h"
 #include "location.h"
 #include "grid.h"
+#include "simnode.h"
+
 #include <string>
 namespace EIN_JRW_Prog5
 {
 class Grid;
-class Router
+class Router : public SimNode
 {
  public:
   // Constructor
@@ -48,7 +50,6 @@ class Router
   int maxQueueSize;
   std::string name;
   Direction rDir;
-  int routerID;
   Grid *simGrid;
 };
 }

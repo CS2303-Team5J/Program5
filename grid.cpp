@@ -161,7 +161,7 @@ namespace EIN_JRW_Prog5
         }
     }
 
-    void Grid::addRouter(Router *r)
+    void Grid::addRouter(SimNode *r)
     {
         bool placed = false;
 

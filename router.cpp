@@ -16,7 +16,7 @@ namespace EIN_JRW_Prog5
     maxQueueSize = 0;
     this->name = name;
     packetBeingSent = NULL;
-    this->routerID = id;
+    this->nodeID = id;
 
     this->rDir = directionBasedOnID(id);
 
@@ -149,7 +149,7 @@ namespace EIN_JRW_Prog5
 
   int Router::getID()
   {
-        return this->routerID;
+        return this->nodeID;
   }
 
 

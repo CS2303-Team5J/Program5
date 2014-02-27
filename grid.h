@@ -4,13 +4,13 @@
 #include "router.h"
 namespace EIN_JRW_Prog5
 {
-    class Router;
+    class SimNode;
     class Grid
     {
         public:
             Grid();
             Grid(int xDim, int yDim);
-            void addRouter(Router* r);
+            void addRouter(SimNode* r);
             void moveRouter(Router* r);
             void print();
         private:
