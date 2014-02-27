@@ -3,7 +3,7 @@
 #define FCFSQUEUE_H
 #include "packet.h"
 #include "queueNode.h"
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
   class FCFSqueue //this class handles the transmission queues for M1 and M2.
 {

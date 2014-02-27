@@ -4,7 +4,7 @@
 #include "packet.h"
 #include <iostream>
 
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
 	EventList::EventList()
 	{
@@ -84,7 +84,7 @@ namespace EIN_JRW_Lab5
 	// Gets the next event on the event list
 	EventNode EventList::getNextEvent()
 	{
-	        EventNode *temp = head; 
+	        EventNode *temp = head;
 	        head = head->link(); // Sets head to next link
 	        EventNode tempNode = *temp;
 	        temp->link() = NULL;

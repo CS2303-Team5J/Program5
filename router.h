@@ -5,14 +5,16 @@
 #include "receiver.h"
 #include "router.h"
 #include "eventlist.h"
+#include "location.h"
 #include <string>
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
+
 class Router
 {
  public:
   // Constructor
-  Router(EventList* e, std::string name){ events = e; maxQueueSize = 0; this->name = name; packetBeingSent = NULL;}
+  Router(EventList* e, std::string name, int id);
 	// Send the packet
   void sendPacket(int simTime, int trans, int prop);
 	// Receive a packet
@@ -21,21 +23,32 @@ class Router
   std::string getName(){return this->name;}
 	// Run a cycle for sending a packet to another router
   void cycle(int simTime,Router* r, int trans, int prop);
-	// Run a cycle for sending a packet to a receiver 
+	// Run a cycle for sending a packet to a receiver
   void cycle(int simTime,Receiver* r, int trans, int prop);
 	// Get the max queue size experienced
   int getMaxQueue() { return maxQueueSize;}
+    // Get the location of the router
+  location getLocation();
+  Direction getDirection();
+  void setDirection(Direction dir);
+  void setLocation(location newLoc);
+  int getID();
 
  private:
+
+  Direction directionBasedOnID(int id);
+
   FCFSqueue packetQueue;
   EventList *events;
   Packet *packetBeingSent;
   int sendTimeRem;
   int sendTime;
   bool hasTransmitted;
+  location routerLoc;
   int maxQueueSize;
   std::string name;
-
+  Direction rDir;
+  int routerID;
 };
 }
 #endif

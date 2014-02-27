@@ -2,7 +2,7 @@
 #ifndef RECEIVER_H
 #define RECEIVER_H
 #include "eventlist.h"
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
 class Receiver
 	{

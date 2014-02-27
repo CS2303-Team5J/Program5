@@ -6,7 +6,7 @@
 
 
 
-namespace EIN_JRW_Lab5 {
+namespace EIN_JRW_Prog5 {
 
 
    enum state {

@@ -4,7 +4,7 @@
 #include "packet.h" //includes packet header
 #include "eventnode.h"
 
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
 	class EventList
 	{
@@ -13,7 +13,7 @@ namespace EIN_JRW_Lab5
 	    	void addNewEvent(Packet p); //adds a event/packet to the list
     		void addModifiedEvent(Packet p); // adds an updated event to the list
     		EventNode getNextEvent(); // Gets the next event
-    		void printEventList(); // Print the event list 
+    		void printEventList(); // Print the event list
 	    private:
   		EventNode* head; // The start of the event list
   	};

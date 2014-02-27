@@ -1,11 +1,13 @@
 #include "location.h"
-
+namespace EIN_JRW_Prog5{
 location::location()
 {
     //ctor
 }
 
-location::~location()
+location::location(int x, int y)
 {
-    //dtor
+    this->SetxCoord(x);
+    this->SetyCoord(y);
+}
 }

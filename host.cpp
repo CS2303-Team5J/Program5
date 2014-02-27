@@ -1,7 +1,7 @@
-// Author Jacob Watson (jrwatson@wpi.edu)  | Erik Nadel (einadel@wpi.edu) 
+// Author Jacob Watson (jrwatson@wpi.edu)  | Erik Nadel (einadel@wpi.edu)
 #include "packet.h"
 #include "host.h"
-namespace EIN_JRW_Lab5
+namespace EIN_JRW_Prog5
 {
     Packet Host::getPacket()
     {
@@ -27,7 +27,7 @@ namespace EIN_JRW_Lab5
         sendTimeRem = trans + prop;
         sendTime = trans + prop;
         packetBeingSent = new Packet(); // reset the packetBeing Sent
-        hasTransmitted = false; 
+        hasTransmitted = false;
         *packetBeingSent = p; // Set the packet being sent
     }
 
@@ -41,7 +41,7 @@ namespace EIN_JRW_Lab5
                 sendPacket(trans,prop, simTime); // Send it
             }
         }
-        else if(packetBeingSent != NULL) // Are we processing a packet?
+        if(packetBeingSent != NULL) // Are we processing a packet?
         {
 
             sendTimeRem--;
@@ -55,8 +55,8 @@ namespace EIN_JRW_Lab5
 
             if(sendTimeRem <= 0) // Is the packet done sending?
             {
-                r->receivePacket(*packetBeingSent,simTime); // Put the packet at the router. 
-                Packet *temp = packetBeingSent; // Delete the packet being sent from the router cache 
+                r->receivePacket(*packetBeingSent,simTime); // Put the packet at the router.
+                Packet *temp = packetBeingSent; // Delete the packet being sent from the router cache
                 packetBeingSent = NULL;
                 delete temp;
             }
