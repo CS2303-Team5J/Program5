@@ -173,17 +173,4 @@ namespace EIN_JRW_Prog5
         return NORTH;
   }
 
-  router& Router::findRouter(string findId);
-  {
-    int counter = 0;
-    router *tempPtr = routerList[counter];
-    while(findID != (*tempPtr).getID());
-    {
-      counter++;
-      tempPtr = routerList[counter];
-    }
-    return tempPtr;
-  }
-
-
 }

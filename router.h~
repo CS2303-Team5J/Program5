@@ -36,7 +36,7 @@ class Router : public SimNode
   void setDirection(Direction dir);
   void setLocation(location newLoc);
   int getID();
-  static router& findRouter(string findId);
+
  private:
 
   Direction directionBasedOnID(int id);
