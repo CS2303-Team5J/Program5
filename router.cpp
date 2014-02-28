@@ -113,7 +113,7 @@ namespace EIN_JRW_Prog5
             }
             if(sendTimeRem <= 0)
             {
-                r->receivePacket(*packetBeingSent,simTime,events);
+                r->receivePacket(*packetBeingSent,simTime);
                 Packet *temp = packetBeingSent;
                 packetBeingSent = NULL;
                 delete temp;
@@ -134,7 +134,7 @@ namespace EIN_JRW_Prog5
 
   void Router::setLocation(location newLoc)
   {
-        this->routerLoc = newLoc;
+        this->nodeLoc = newLoc;
   }
 
   Direction Router::getDirection()
@@ -144,12 +144,12 @@ namespace EIN_JRW_Prog5
 
   location Router::getLocation()
   {
-        return this->routerLoc;
+        return this->nodeLoc;
   }
 
   int Router::getID()
   {
-        return this->nodeID;
+    return this->nodeID;
   }
 
 

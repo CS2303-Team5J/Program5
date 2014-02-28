@@ -32,21 +32,21 @@ class Router : public SimNode
   int getMaxQueue() { return maxQueueSize;}
     // Get the location of the router
   location getLocation();
+  int getID();
   Direction getDirection();
   void setDirection(Direction dir);
   void setLocation(location newLoc);
-  int getID();
 
  private:
 
   Direction directionBasedOnID(int id);
+
   FCFSqueue packetQueue;
   EventList *events;
   Packet *packetBeingSent;
   int sendTimeRem;
   int sendTime;
   bool hasTransmitted;
-  location routerLoc;
   int maxQueueSize;
   std::string name;
   Direction rDir;

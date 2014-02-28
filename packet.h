@@ -46,7 +46,7 @@ namespace EIN_JRW_Prog5 {
 	// Get the arrival time of the packet
     int getArrivalTime() {return arrived;}
   private:
-    int bitSize;
+    int bitSize; // 1 2 or 3
     std::string source;
     int timeModified;
     int arrived;

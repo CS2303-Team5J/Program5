@@ -12,4 +12,9 @@ namespace EIN_JRW_Prog5
         this->nodeLoc = l;
     }
 
+    int SimNode::getID()
+    {
+        return this->nodeID;
+    }
+
 }

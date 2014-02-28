@@ -6,6 +6,8 @@
 #include "packet.h"
 #include "eventlist.h"
 #include "grid.h"
+#include "stack.h"
+
 using namespace std;
 using namespace EIN_JRW_Prog5;
 
@@ -33,7 +35,7 @@ int main()
     Router *M1 = new Router(&global,"M1",1,&routerGrid);
     Router *M2 = new Router(&global,"M2",2,&routerGrid);
     Router *M3 = new Router(&global,"M3",3,&routerGrid);
-    Receiver *R1 = new Receiver();
+    Receiver *R1 = new Receiver(&global);
 
 //while(R1->getNumPacketsReceived() != numPackets) // Run the cycle until the host gets all the packets
 //{
@@ -50,15 +52,17 @@ int main()
 //
 //    currentSimTime++;
 //}
-    routerGrid.addRouter(M1);
-    routerGrid.print();
-while(true)
-{
-    routerGrid.moveRouter(M1);
-    cout << "M1 is at " << M1->getLocation().GetxCoord() << " " << M1->getLocation().GetyCoord() << endl;
-    routerGrid.print();
-    currentSimTime++;
-}
+
+    Stack<SimNode> teststack;
+    teststack.push(&S1);
+    teststack.push(M1);
+    teststack.push(M2);
+    teststack.push(R1);
+
+    cout << teststack.pop()->getID() << endl;
+    cout << teststack.pop()->getID() << endl;
+    cout << teststack.pop()->getID() << endl;
+
 
     //global.printEventList();
 

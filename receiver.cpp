@@ -8,13 +8,14 @@
 
 namespace EIN_JRW_Prog5
 {
-	Receiver::Receiver()
+	Receiver::Receiver(EventList* e)
 	{
+        this->events = e;
         numPacketsReceived = 0;
 		totalResponseTime = 0;
 	}
 
-	void Receiver::receivePacket(Packet p, int simTime,EventList* events)
+	void Receiver::receivePacket(Packet p, int simTime)
 	{
 		p.setState(PROPAGATED,simTime); // The packet is at the router (it was propegated)
 		events->addModifiedEvent(p);

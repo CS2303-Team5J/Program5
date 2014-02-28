@@ -4,7 +4,7 @@
 #include "router.h"
 #include "eventlist.h"
 namespace EIN_JRW_Prog5{
-  class Host
+  class Host : public SimNode
   {
   public:
     Host(EventList* e) {events = e; packetBeingSent = NULL;}
