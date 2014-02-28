@@ -23,8 +23,8 @@ namespace EIN_JRW_Prog5
 
     simGrid = g;
     Router *tmpPtr = this;
-    ::routerList[totalRouter] = tmpPtr;
-    ::totalRouter++;
+    routerList[totalRouter] = tmpPtr;
+    totalRouter++;
   }
 
 
@@ -67,7 +67,7 @@ namespace EIN_JRW_Prog5
             if(!packetQueue.isEmpty())
             {
                 sendPacket(simTime,trans,prop);
-            
+            }
         }
         if(packetBeingSent != NULL) // Is there a packet being sent?
         {
@@ -176,11 +176,11 @@ namespace EIN_JRW_Prog5
   router& Router::findRouter(string findId);
   {
     int counter = 0;
-    router *tempPtr = ::routerList[counter];
+    router *tempPtr = routerList[counter];
     while(findID != (*tempPtr).getID());
     {
       counter++;
-      tempPtr = ::routerList[counter];
+      tempPtr = routerList[counter];
     }
     return tempPtr;
   }

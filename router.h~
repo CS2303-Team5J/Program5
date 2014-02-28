@@ -36,7 +36,7 @@ class Router : public SimNode
   void setDirection(Direction dir);
   void setLocation(location newLoc);
   int getID();
- router& findRouter(string findId);
+  static router& findRouter(string findId);
  private:
 
   Direction directionBasedOnID(int id);
@@ -50,7 +50,8 @@ class Router : public SimNode
   int maxQueueSize;
   std::string name;
   Direction rDir;
-  Grid *simGrid; 
+  Grid *simGrid;
+  static int totalRouters; 
 };
 }
 #endif

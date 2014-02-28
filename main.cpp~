@@ -9,10 +9,10 @@
 using namespace std;
 using namespace EIN_JRW_Prog5;
 
-vector <Router&> RouterList;
-int totalRouters = 0;
 int main()
 {
+  vector <Router&> RouterList;
+  int totalRouters = 0;
     int currentSimTime = 0;
     EventList global;
     Host S1(&global);
