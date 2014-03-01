@@ -19,15 +19,13 @@ class Router : public SimNode
   // Constructor
   Router(EventList* e, std::string name, int id,Grid* g);
 	// Send the packet
-  void sendPacket(int simTime, int trans, int prop);
+  void sendPacket(int simTime);
 	// Receive a packet
   void receivePacket(Packet p, int simTime);
 	// Get the name of the router
   std::string getName(){return this->name;}
-	// Run a cycle for sending a packet to another router
-  void cycle(int simTime,Router* r, int trans, int prop);
-	// Run a cycle for sending a packet to a receiver
-  void cycle(int simTime,Receiver* r, int trans, int prop);
+	// Run a cycle for sending a packet to another node
+  void cycle(int simTime);
 	// Get the max queue size experienced
   int getMaxQueue() { return maxQueueSize;}
     // Get the location of the router

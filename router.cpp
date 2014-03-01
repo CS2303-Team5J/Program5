@@ -26,32 +26,38 @@ namespace EIN_JRW_Prog5
 
 
   // Send the next packet in queue to a router
-  void Router::sendPacket(int simTime,int trans, int prop)
+  void Router::sendPacket(int simTime)
   {
-    Packet p = this->packetQueue.dequeue();
-    sendTimeRem = trans + prop;
-    sendTime = trans + prop;
-    packetBeingSent = new Packet();
-    hasTransmitted = false;
-    *packetBeingSent = p;
-    std::cout << packetQueue.sizeOf() << std::endl;
+        Packet p  = this->packetQueue.dequeue(); // Get the next packet to send
+        events->addNewEvent(p); // Add to the event list that the packet arrived
+        SimNode *nextDest  = p.route().previewPop();
 
+
+        sendTimeRem = p.getSize() + p.calculatePropTime(this->getLocation(),nextDest->getLocation());
+        sendTime = sendTimeRem;
+
+
+        packetBeingSent = new Packet(); // reset the packetBeing Sent
+        hasTransmitted = false;
+
+        *packetBeingSent = p; // Set the packet being sent
 
     //r->receivePacket(p,events,simTime);
   }
   // Receive a packet
   void Router::receivePacket(Packet p,int simTime)
   {
-    p.setState(PROPAGATED,simTime); // A packet received means it has been propagated
-    events->addModifiedEvent(p);
-	packetQueue.enqueue(p);
-	p.setState(RECIEVED,simTime); // It has also been received (implied)
-	events->addModifiedEvent(p);
-    //std::cout << name << ": "; // print the packet name for debugging
-    //packetQueue.printQueue();
+        p.route().pop(); // Packet made it to destination. Remove it
+        p.setState(PROPAGATED,simTime); // A packet received means it has been propagated
+        events->addModifiedEvent(p);
+        packetQueue.enqueue(p);
+        p.setState(RECIEVED,simTime); // It has also been received (implied)
+        events->addModifiedEvent(p);
+        //std::cout << name << ": "; // print the packet name for debugging
+        //packetQueue.printQueue();
 
   }
-  void Router::cycle(int simTime, Router* r,int trans, int prop)
+  void Router::cycle(int simTime)
   {
 
         if(packetQueue.sizeOf() > maxQueueSize) // Is the queue the biggest it has been?
@@ -63,14 +69,14 @@ namespace EIN_JRW_Prog5
             // Do we have another packet to send?
             if(!packetQueue.isEmpty())
             {
-                sendPacket(simTime,trans,prop);
+                sendPacket(simTime);
             }
         }
         if(packetBeingSent != NULL) // Is there a packet being sent?
         {
             sendTimeRem--;
 
-            if(sendTimeRem <= sendTime-trans && !hasTransmitted) // Has the packet transmitted?
+            if(sendTimeRem <= sendTime - packetBeingSent->getSize() && !hasTransmitted) // Has the packet transmitted?
             {
                 packetBeingSent->setState(TRANSMITTED,simTime); // Mark transmitted
                 events->addModifiedEvent(*packetBeingSent); // add to event list
@@ -79,51 +85,13 @@ namespace EIN_JRW_Prog5
 
             if(sendTimeRem <= 0) // Is the packet done sending?
             {
-                r->receivePacket(*packetBeingSent,simTime); // make sure the router has the packet
+                SimNode *nextDest = packetBeingSent->route().previewPop();
+                nextDest->receivePacket(*packetBeingSent,simTime); // make sure the router has the packet
                 Packet *temp = packetBeingSent; // delete packet from cache
                 packetBeingSent = NULL;
                 delete temp;
             }
         }
-  }
-  void Router::cycle(int simTime, Receiver* r,int trans, int prop)
-  {
-	// Same as before. except this is a cycle to send to a receiver.
-
-        if(packetQueue.sizeOf() > maxQueueSize)
-        {
-            maxQueueSize = packetQueue.sizeOf();
-        }
-        if(packetBeingSent == NULL)
-        {
-            // Do we have another packet to send?
-            if(!packetQueue.isEmpty())
-            {
-                sendPacket(simTime,trans,prop);
-            }
-        }
-        else if(packetBeingSent != NULL)
-        {
-            sendTimeRem--;
-            if(sendTimeRem <= sendTime-trans && !hasTransmitted)
-            {
-                packetBeingSent->setState(TRANSMITTED,simTime);
-                events->addModifiedEvent(*packetBeingSent);
-                hasTransmitted = true;
-            }
-            if(sendTimeRem <= 0)
-            {
-                r->receivePacket(*packetBeingSent,simTime);
-                Packet *temp = packetBeingSent;
-                packetBeingSent = NULL;
-                delete temp;
-            }
-        }
-
-       if(simTime % 10 == 0 && simTime != 0)
-            simGrid->moveRouter(this);
-
-
   }
 
 

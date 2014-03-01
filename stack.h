@@ -7,12 +7,13 @@ namespace EIN_JRW_Prog5
     {
         public:
         Stack();
-        void push(T* data);
-        T* pop();
+        void push(T data);
+        T previewPop();
+        T pop();
         int getSize();
 
         private:
-        std::vector<T*> stackData;
+        std::vector<T> stackData;
         int sizeOf;
     };
 }

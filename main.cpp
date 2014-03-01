@@ -7,24 +7,27 @@
 #include "eventlist.h"
 #include "grid.h"
 #include "stack.h"
+#include <vector>
 
 using namespace std;
 using namespace EIN_JRW_Prog5;
+
+
 
 int main()
 {
     int currentSimTime = 0;
     EventList global;
-    Host S1(&global);
-    Host S2(&global);
+    Host S1(&global,0);
+    Host S2(&global,5);
 
     Grid routerGrid(20,20);
-    for(int x = 0; x < 200; ++x) // Fill host 1 with 100 packets of size (0-99)
+    for(int x = 0; x < 100; ++x) // Fill host 1 with 100 packets of size (0-99)
     {
         Packet p(x,"S1",ARRIVED);
         S1.addPacket(p);
     }
-    for(int x = 200; x < 400; ++x) // Fill host 2 with 100 packets of size 100-199
+    for(int x = 100; x < 200; ++x) // Fill host 2 with 100 packets of size 100-199
     {
         Packet p(x,"S2",ARRIVED);
         S2.addPacket(p);
@@ -34,8 +37,7 @@ int main()
     // Create the routers / receiver
     Router *M1 = new Router(&global,"M1",1,&routerGrid);
     Router *M2 = new Router(&global,"M2",2,&routerGrid);
-    Router *M3 = new Router(&global,"M3",3,&routerGrid);
-    Receiver *R1 = new Receiver(&global);
+    Receiver *R1 = new Receiver(&global,4);
 
 //while(R1->getNumPacketsReceived() != numPackets) // Run the cycle until the host gets all the packets
 //{
@@ -53,15 +55,17 @@ int main()
 //    currentSimTime++;
 //}
 
-    Stack<SimNode> teststack;
+    Stack<SimNode*> teststack;
     teststack.push(&S1);
     teststack.push(M1);
     teststack.push(M2);
     teststack.push(R1);
 
-    cout << teststack.pop()->getID() << endl;
-    cout << teststack.pop()->getID() << endl;
-    cout << teststack.pop()->getID() << endl;
+    cout << teststack.previewPop()->getID() << endl;
+    teststack.pop();
+    cout << teststack.previewPop()->getID() << endl;
+    teststack.pop();
+    cout << teststack.previewPop()->getID() << endl;
 
 
     //global.printEventList();
@@ -79,3 +83,5 @@ int main()
     cout << "Average packet response time " << R1->getAverageResponseTime() / 1000.0 << " seconds" << endl;
     return 0;
 }
+
+

@@ -9,7 +9,7 @@ namespace EIN_JRW_Prog5
 	{
  	public:
 	// Constructors
-		Receiver(EventList* e);
+		Receiver(EventList* e,int id);
 	//////
 		void receivePacket(Packet p, int simTime); // Receive a packet
 		void printPacketStatistics(Packet p); // Print the packet stats

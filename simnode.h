@@ -10,7 +10,7 @@ namespace EIN_JRW_Prog5
             int getID();
             location getLocation();
             void setLocation(location l);
-            void receivePacket(Packet p,int simTime);
+            virtual void receivePacket(Packet p,int simTime) {}
 
         protected:
             int nodeID;
