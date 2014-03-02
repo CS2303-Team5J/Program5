@@ -178,4 +178,9 @@ namespace EIN_JRW_Prog5
             }
         }
     }
+
+    int Grid::getYLength()
+    {
+        return yLength;
+    }
 }

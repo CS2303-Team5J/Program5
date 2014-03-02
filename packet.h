@@ -6,7 +6,7 @@
 #include <vector>
 #include "stack.h"
 #include "location.h"
-
+//#include "simnode.h"
 
 namespace EIN_JRW_Prog5 {
 
@@ -25,7 +25,7 @@ namespace EIN_JRW_Prog5 {
 
     // Constructors
     Packet() {} // Default constructor
-    Packet(int numBits, std::string source, state initState, int arrival = 0, int timeReceived = 0);
+    Packet(int numBits, std::string source, state initState, int arrival = 0);
 
     // Modification Functions
 	// Set the state of the packet
@@ -48,7 +48,9 @@ namespace EIN_JRW_Prog5 {
 	// Get the arrival time of the packet
     int getArrivalTime() {return arrived;}
 
-    void setPath(std::string path, std::vector<SimNode*> networkNodes);
+    void setPath(Stack<SimNode*> networkNodes);
+
+    void printPath();
 
     int calculatePropTime(location start, location endPoint);
 

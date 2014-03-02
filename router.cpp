@@ -22,6 +22,8 @@ namespace EIN_JRW_Prog5
 
     simGrid = g;
 
+    simGrid->addObject(this);
+
   }
 
 
@@ -51,6 +53,7 @@ namespace EIN_JRW_Prog5
         p.setState(PROPAGATED,simTime); // A packet received means it has been propagated
         events->addModifiedEvent(p);
         packetQueue.enqueue(p);
+        packetQueue.printQueue();
         p.setState(RECIEVED,simTime); // It has also been received (implied)
         events->addModifiedEvent(p);
         //std::cout << name << ": "; // print the packet name for debugging
@@ -91,6 +94,11 @@ namespace EIN_JRW_Prog5
                 packetBeingSent = NULL;
                 delete temp;
             }
+        }
+        if(simTime != 0 && simTime % 10 == 0)
+        {
+            simGrid->moveRouter(this);
+            simGrid->print();
         }
   }
 

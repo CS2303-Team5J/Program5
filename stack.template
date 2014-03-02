@@ -1,6 +1,7 @@
 #include "stack.h"
 #include <vector>
 #include <cassert>
+#include <iostream>
 
 namespace EIN_JRW_Prog5
 {
@@ -39,6 +40,15 @@ namespace EIN_JRW_Prog5
     int Stack<T>::getSize()
     {
         return sizeOf;
+    }
+
+    template<class T>
+    void Stack<T>::printData()
+    {
+        for(int x = 0; x < stackData.size(); x++)
+        {
+            std::cout << stackData[x] << std::endl;
+        }
     }
 
 }

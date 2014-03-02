@@ -4,16 +4,20 @@
 #include "receiver.h"
 #include "eventlist.h"
 #include "eventnode.h"
+#include "grid.h"
 
 
 namespace EIN_JRW_Prog5
 {
-	Receiver::Receiver(EventList* e,int id)
+	Receiver::Receiver(EventList* e,int id,Grid* onGrid,int rGridSize)
 	{
         this->events = e;
         numPacketsReceived = 0;
 		totalResponseTime = 0;
 		this->nodeID = id;
+		simGrid = onGrid;
+        gridSize = rGridSize;
+        simGrid->addObject(this);
 	}
 
 	void Receiver::receivePacket(Packet p, int simTime)
@@ -40,5 +44,10 @@ namespace EIN_JRW_Prog5
 			return totalResponseTime / numPacketsReceived;
 		else
 			return 0.0;
+	}
+
+	location Receiver::getLocation()
+	{
+        return location(this->nodeLoc.GetxCoord(),gridSize+1);
 	}
 }

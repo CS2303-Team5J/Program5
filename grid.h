@@ -2,6 +2,7 @@
 #define GRID_H
 #include "location.h"
 #include "router.h"
+//#include "simnode.h"
 namespace EIN_JRW_Prog5
 {
     class Router;
@@ -14,6 +15,7 @@ namespace EIN_JRW_Prog5
             void addObject(SimNode* r);
             void moveRouter(Router* r);
             void print();
+            int getYLength();
         private:
             void moveObject(location cur, location next, Router* r);
             bool isOnEdge(location l);

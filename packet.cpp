@@ -2,10 +2,11 @@
 #include <string>
 #include <cmath>
 #include <vector>
+#include <cstdlib>
 
 namespace EIN_JRW_Prog5
 {
-    Packet::Packet(int numBits, std::string source, state initState, int arrival, int timeReceived)
+    Packet::Packet(int numBits, std::string source, state initState, int arrival)
     {
         bitSize = numBits;
         this->source = source;
@@ -41,29 +42,14 @@ namespace EIN_JRW_Prog5
                                       endPoint.GetxCoord(),endPoint.GetyCoord())));
     }
 
-
-    void Packet::setPath(std::string inputpath,std::vector<SimNode*> networkNodes)
+    void Packet::printPath()
     {
-        std::string delim = " ";
-        int start = 0;
-        int end;
-        int i;
-        std::vector<std::string> splitString;
-        // Until find returns nothing (string::npos)
-        while((end = inputpath.find(delim,start) != std::string::npos))
-        {
-            // Get the substring up to the delimter
-            // end is the position of the delimiting string
-            splitString.push_back(inputpath.substr(start,end-start));
-            start = end + delim.size();
-        }
-        // Get the last remaining word
-        splitString.push_back(inputpath.substr(start));
+        sourceRoute.printData();
+    }
 
-        for(i = 0; i < splitString.size(); i++)
-        {
-
-        }
+    void Packet::setPath(Stack<SimNode*> networkPath)
+    {
+        sourceRoute = networkPath;
     }
 
 

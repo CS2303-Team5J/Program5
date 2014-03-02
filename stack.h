@@ -11,6 +11,7 @@ namespace EIN_JRW_Prog5
         T previewPop();
         T pop();
         int getSize();
+        void printData();
 
         private:
         std::vector<T> stackData;

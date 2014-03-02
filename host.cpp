@@ -1,8 +1,19 @@
 // Author Jacob Watson (jrwatson@wpi.edu)  | Erik Nadel (einadel@wpi.edu)
 #include "packet.h"
 #include "host.h"
+
 namespace EIN_JRW_Prog5
 {
+
+    Host::Host(EventList* e, int id, Grid* g)
+    {
+        events = e;
+        nodeID = id;
+        simGrid = g;
+        simGrid->addObject(this);
+        packetBeingSent = NULL;
+    }
+
     Packet Host::getPacket()
     {
         if(packets.size() != 0) // Is there a packet to get?
@@ -22,10 +33,12 @@ namespace EIN_JRW_Prog5
     {
         Packet p  = this->getPacket(); // Get the next packet to send
         p.setArrival(simTime);
+        //p.printPath();
         events->addNewEvent(p); // Add to the event list that the packet arrived
 
         SimNode *nextDest  = p.route().previewPop();
         sendTimeRem = p.getSize() + p.calculatePropTime(this->getLocation(),nextDest->getLocation());
+        //sendTimeRem = 5;
         sendTime = sendTimeRem;
         packetBeingSent = new Packet(); // reset the packetBeing Sent
         hasTransmitted = false;
@@ -57,7 +70,7 @@ namespace EIN_JRW_Prog5
 
             if(sendTimeRem <= 0) // Is the packet done sending?
             {
-
+                //packetBeingSent->printPath();
                 SimNode *nextDest = packetBeingSent->route().previewPop();
                 nextDest->receivePacket(*packetBeingSent,simTime); // Put the packet at the router.
                 Packet *temp = packetBeingSent; // Delete the packet being sent from the router cache
@@ -68,5 +81,10 @@ namespace EIN_JRW_Prog5
 
         }
 
+    }
+
+    location Host::getLocation()
+    {
+        return location(this->nodeLoc.GetxCoord(),-1);
     }
 }
