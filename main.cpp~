@@ -44,29 +44,6 @@ int main(int argc, char *argv[])
 	string tempSR;
 	getline(cin, inputString);
 
-	std::string delim = " ";
-        int start = 0;
-        int end;
-
-	std::vector<std::string> splitString;
-        // Until find returns nothing (string::npos)
-        while((end = inputpath.find(delim,start) != std::string::npos))
-	  {
-            // Get the substring up to the delimter
-            // end is the position of the delimiting string
-            splitString.push_back(inputpath.substr(start,end-start));
-            start = end + delim.size();
-	  }
-        // Get the last remaining word
-        splitString.push_back(inputpath.substr(start));
-	splitString[0] = tempSource;
-	splitString[1] = tempArrival;
-	splitString[2] = tempPackets;
-	splitString[3] = tempPktSize;
-	splitString[4] = tempSRSize;
-	splitString[5] = tempSR;
-	//add router statements here when we're ready
-	delete[splitString];
       }
 
     Grid routerGrid(20,20);

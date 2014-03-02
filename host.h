@@ -4,15 +4,15 @@
 #include "router.h"
 #include "eventlist.h"
 namespace EIN_JRW_Prog5{
-  class Host
+  class Host : public SimNode
   {
   public:
-    Host(EventList* e) {events = e; packetBeingSent = NULL;}
+    Host(EventList* e,int id) {events = e; packetBeingSent = NULL; this->nodeID = id;}
     void addPacket(Packet p){ packets.push_back(p);} // add packet to the host to send
     Packet getPacket(); // Get the next packet to send
-    void sendPacket(int trans,int prop, int simTime); // send the next packet
+    void sendPacket(int simTime); // send the next packet
     int getNumPackets() {return packets.size();} // Get the number of packets in the host
-    void cycle(int simTime, Router* r, int trans,int prop); // perform a cycle
+    void cycle(int simTime); // perform a cycle
 
   private:
     std::vector<Packet> packets; // list of packets that the host will send

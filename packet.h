@@ -3,8 +3,12 @@
 #define PACKET_H
 
 #include <string>
+#include <vector>
+#include "stack.h"
+#include "location.h"
 
-namespace EIN_JRW_Lab5 {
+
+namespace EIN_JRW_Prog5 {
 
 
    enum state {
@@ -14,15 +18,15 @@ namespace EIN_JRW_Lab5 {
 		ARRIVED, //Arrived means the packet has just come from the source,
 		PROPAGATED //Propagated means that it has finished progagating
 	};
-
+  class SimNode;
   class Packet
   {
   public:
 
     // Constructors
     Packet() {} // Default constructor
-    Packet(int numBits, std::string source, state initState, int arrival = 0, int timeReceived = 0)
-        {bitSize = numBits; this->source = source; currentState = initState; arrived = arrival; this->timeReceived = timeReceived; timeModified = 0;}
+    Packet(int numBits, std::string source, state initState, int arrival = 0, int timeReceived = 0);
+
     // Modification Functions
 	// Set the state of the packet
     void setState(state s,int modTime){this->currentState = s; timeModified = modTime;}
@@ -43,16 +47,20 @@ namespace EIN_JRW_Lab5 {
     std::string  getSource() {return this->source;}
 	// Get the arrival time of the packet
     int getArrivalTime() {return arrived;}
-    void setPath(std::string path);
-      simNode getNextDest();
+
+    void setPath(std::string path, std::vector<SimNode*> networkNodes);
+
+    int calculatePropTime(location start, location endPoint);
+
+    Stack<SimNode*>& route();
   private:
-    int bitSize;
+    int bitSize; // 1 2 or 3
     std::string source;
     int timeModified;
     int arrived;
     int timeReceived;
     state currentState;
-    stack <simNode>  path(global:size);
+    Stack<SimNode*> sourceRoute;
   };
 }
 #endif

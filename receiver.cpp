@@ -8,14 +8,17 @@
 
 namespace EIN_JRW_Prog5
 {
-	Receiver::Receiver()
+	Receiver::Receiver(EventList* e,int id)
 	{
+        this->events = e;
         numPacketsReceived = 0;
 		totalResponseTime = 0;
+		this->nodeID = id;
 	}
 
-	void Receiver::receivePacket(Packet p, int simTime,EventList* events)
+	void Receiver::receivePacket(Packet p, int simTime)
 	{
+        p.route().pop();
 		p.setState(PROPAGATED,simTime); // The packet is at the router (it was propegated)
 		events->addModifiedEvent(p);
 		p.setState(DELIVERED,simTime); // This means that the router was also delivered

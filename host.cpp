@@ -14,31 +14,33 @@ namespace EIN_JRW_Prog5
         else
         {
             // No packet was found. Return a bad packet
-            Packet *noPacket = new Packet(-1,"NOTFOUND",ARRIVED);
+            Packet *noPacket = new Packet(-1,"something bad happened...",ARRIVED);
             return *noPacket;
         }
     }
-    void Host::sendPacket(int trans,int prop, int simTime)
+    void Host::sendPacket(int simTime)
     {
         Packet p  = this->getPacket(); // Get the next packet to send
         p.setArrival(simTime);
         events->addNewEvent(p); // Add to the event list that the packet arrived
 
-        sendTimeRem = trans + prop;
-        sendTime = trans + prop;
+        SimNode *nextDest  = p.route().previewPop();
+        sendTimeRem = p.getSize() + p.calculatePropTime(this->getLocation(),nextDest->getLocation());
+        sendTime = sendTimeRem;
         packetBeingSent = new Packet(); // reset the packetBeing Sent
         hasTransmitted = false;
         *packetBeingSent = p; // Set the packet being sent
+
     }
 
-    void Host::cycle(int simTime, Router* r,int trans, int prop)
+    void Host::cycle(int simTime)
     {
         if(packetBeingSent == NULL)
         {
             // Do we have another packet to send?
             if(packets.size() != 0)
             {
-                sendPacket(trans,prop, simTime); // Send it
+                sendPacket(simTime); // Send it
             }
         }
         if(packetBeingSent != NULL) // Are we processing a packet?
@@ -46,7 +48,7 @@ namespace EIN_JRW_Prog5
 
             sendTimeRem--;
 
-            if(sendTimeRem < sendTime - trans && !hasTransmitted) // Has the packet finished transmitting?
+            if(sendTimeRem < sendTime - packetBeingSent->getSize() && !hasTransmitted) // Has the packet finished transmitting?
             {
                 packetBeingSent->setState(TRANSMITTED,simTime); // Set the state to transmitted
                 events->addModifiedEvent(*packetBeingSent); // Add that event to the event list
@@ -55,7 +57,9 @@ namespace EIN_JRW_Prog5
 
             if(sendTimeRem <= 0) // Is the packet done sending?
             {
-                r->receivePacket(*packetBeingSent,simTime); // Put the packet at the router.
+
+                SimNode *nextDest = packetBeingSent->route().previewPop();
+                nextDest->receivePacket(*packetBeingSent,simTime); // Put the packet at the router.
                 Packet *temp = packetBeingSent; // Delete the packet being sent from the router cache
                 packetBeingSent = NULL;
                 delete temp;

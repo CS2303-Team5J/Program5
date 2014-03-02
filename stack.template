@@ -1,0 +1,44 @@
+#include "stack.h"
+#include <vector>
+#include <cassert>
+
+namespace EIN_JRW_Prog5
+{
+    template<class T>
+    Stack<T>::Stack()
+    {
+        this->stackData = std::vector<T>();
+    }
+
+    template<class T>
+    void Stack<T>::push(T data)
+    {
+        this->stackData.push_back(data);
+        sizeOf++;
+    }
+
+    template<class T>
+    T Stack<T>::previewPop()
+    {
+        assert(sizeOf!=0);
+        T dataPopped = stackData[0];
+        return dataPopped;
+    }
+
+    template<class T>
+    T Stack<T>::pop()
+    {
+        assert(sizeOf!=0);
+        T dataPopped = stackData[0]; // Get the top of the stack
+        stackData.erase(stackData.begin()); // Take it out
+        sizeOf--;
+        return dataPopped;
+    }
+
+    template<class T>
+    int Stack<T>::getSize()
+    {
+        return sizeOf;
+    }
+
+}
