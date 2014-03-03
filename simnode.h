@@ -13,6 +13,7 @@ namespace EIN_JRW_Prog5
             virtual location getLocation();
             void setLocation(location l);
             virtual void receivePacket(Packet p,int simTime) {}
+            virtual void cycle(int simTime) {}
 
         protected:
             int nodeID;

@@ -9,6 +9,7 @@ namespace EIN_JRW_Prog5
 	{
 	public:
 		// Constructor
+		EventNode() {}
 		EventNode(Packet p) { data = p; nodeLink = NULL;}
 		// Modification function
 		EventNode*& link() { return nodeLink; } // Get the link of the node

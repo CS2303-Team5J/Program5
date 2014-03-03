@@ -10,7 +10,7 @@ namespace EIN_JRW_Prog5{
   {
   public:
     Host(EventList* e,int id,Grid* g);
-    void addPacket(Packet p){  p.route().pop(); packets.push_back(p);} // add packet to the host to send
+    void addPacket(Packet p){packets.push_back(p);} // add packet to the host to send
     Packet getPacket(); // Get the next packet to send
     void sendPacket(int simTime); // send the next packet
     int getNumPackets() {return packets.size();} // Get the number of packets in the host

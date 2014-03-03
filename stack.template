@@ -9,6 +9,7 @@ namespace EIN_JRW_Prog5
     Stack<T>::Stack()
     {
         this->stackData = std::vector<T>();
+        sizeOf = 0;
     }
 
     template<class T>

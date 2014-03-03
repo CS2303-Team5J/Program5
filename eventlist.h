@@ -12,10 +12,14 @@ namespace EIN_JRW_Prog5
 		EventList(); //constructor
 	    	void addNewEvent(Packet p); //adds a event/packet to the list
     		void addModifiedEvent(Packet p); // adds an updated event to the list
-    		EventNode getNextEvent(); // Gets the next event
+    		EventNode* getNextRelevantEvent(int time,state s, SimNode *currNode);
+    		bool hasRelevantEvent(int time, state s, SimNode *currNode);
+    		EventNode peakNextEvent();
+    		bool isEmpty();
     		void printEventList(); // Print the event list
 	    private:
   		EventNode* head; // The start of the event list
+  		EventNode* tail;
   	};
 }
 #endif

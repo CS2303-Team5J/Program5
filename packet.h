@@ -33,7 +33,7 @@ namespace EIN_JRW_Prog5 {
 	// Set the time the packet was received by the host
     void setReceived(int time) {this->timeReceived = time;}
 	// Set the time the packet was sent
-    void setArrival(int time) {this->arrived = time;}
+    void setArrival(int time) {this->arrived = time; this->timeModified = time;}
     // Constant Functions
 	// Get the response time of the packet
     int getResponseTime() {return this->timeReceived - this->arrived;}

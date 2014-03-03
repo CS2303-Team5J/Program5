@@ -37,6 +37,8 @@ int main()
     Receiver *R1 = new Receiver(&global,4,&receiverGrid,routerGrid.getYLength());
 
 
+
+
     int b = 5;
 
 
@@ -49,35 +51,36 @@ int main()
     for(int y = 0; y < network.size(); ++y)
     {
         cout << network[y]->getID() << ": " <<network[y] << endl;
-
     }
     cout << "THESE ARE THE CORRECT POINTERS!!!" << endl;
 
     for(int x = 0; x < 100; ++x) // Fill host 1 with 100 packets of size (0-99)
     {
         Packet p(2,"S1",ARRIVED);
-        p.setPath(createRoutePath("1 3 4",network));
+        p.setPath(createRoutePath("1 2 3 4",network));
         S1.addPacket(p);
     }
 
     printSimMap(hostGrid,routerGrid,receiverGrid);
 
-while(R1->getNumPacketsReceived() != numPackets) // Run the cycle until the host gets all the packets
-{
+     do// Run the cycle until the host gets all the packets
+    {
 
     S1.cycle(currentSimTime);
 
-    //M1->cycle(currentSimTime);
+    M1->cycle(currentSimTime);
 
     M2->cycle(currentSimTime);
 
     //global.printEventList();
 
+    R1->cycle(currentSimTime);
+
     currentSimTime++;
-}
+    }while(!global.isEmpty());
 
 
-    //global.printEventList();
+    global.printEventList();
 
     // Print the stats
 

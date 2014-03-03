@@ -18,6 +18,7 @@ namespace EIN_JRW_Prog5
 		int getNumPacketsReceived(){return numPacketsReceived;} // Print num packets received
 		double getAverageResponseTime();
 		location getLocation();
+		void cycle(int simTime);
  	private:
 		int prop;
 		int numPacketsReceived;
