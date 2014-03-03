@@ -30,9 +30,9 @@ namespace EIN_JRW_Prog5
   // Send the next packet in queue to a router
   void Router::sendPacket(int simTime)
   {
-        packetQueue.printQueue();
+        //packetQueue.printQueue();
         Packet p  = this->packetQueue.dequeue(); // Get the next packet to send
-        std::cout << "Queue at " << nodeID;
+        //std::cout << "Queue at " << nodeID;
 
         //events->addNewEvent(p); // Add to the event list that the packet arrived
         p.route().pop();
@@ -61,9 +61,9 @@ namespace EIN_JRW_Prog5
   {
 
         //p.route().pop(); // Packet made it to destination. Remove it
-        std::cout << "Queue at " << nodeID;
+        std::cout << "Got packet at " << nodeID << std::endl;
         packetQueue.enqueue(p);
-        packetQueue.printQueue();
+        //packetQueue.printQueue();
 
         //events->getNextRelevantEvent(simTime,PROPAGATED,this);
         p.setState(RECIEVED,simTime); // It has also been received (implied)
@@ -196,4 +196,8 @@ namespace EIN_JRW_Prog5
         return NORTH;
   }
 
+    void Router::identifyType()
+    {
+        std::cout << "Router " << std::endl;
+    }
 }

@@ -34,6 +34,7 @@ class Router : public SimNode
   Direction getDirection();
   void setDirection(Direction dir);
   void setLocation(location newLoc);
+  void identifyType();
 
  private:
 

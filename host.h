@@ -3,6 +3,7 @@
 #include <vector>
 #include "router.h"
 #include "eventlist.h"
+#include <iostream>
 namespace EIN_JRW_Prog5{
 
   class Grid;
@@ -17,6 +18,10 @@ namespace EIN_JRW_Prog5{
     void cycle(int simTime); // perform a cycle
     location getLocation();
     int getPacketsSent() {return packetsSent;}
+    void setArrivalTime(int time){arrivalTime = time;}
+    int getArrivalTime() {return arrivalTime;}
+    void identifyType() {std::cout << "Host " << std::endl;}
+
 
   private:
     std::vector<Packet> packets; // list of packets that the host will send
@@ -27,5 +32,6 @@ namespace EIN_JRW_Prog5{
     Packet *packetBeingSent; // point to the packet currently being sent
     Grid *simGrid;
     int packetsSent;
+    int arrivalTime;
   };
 }
