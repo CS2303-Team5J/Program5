@@ -16,6 +16,7 @@ namespace EIN_JRW_Prog5{
     int getNumPackets() {return packets.size();} // Get the number of packets in the host
     void cycle(int simTime); // perform a cycle
     location getLocation();
+    int getPacketsSent() {return packetsSent;}
 
   private:
     std::vector<Packet> packets; // list of packets that the host will send
@@ -25,5 +26,6 @@ namespace EIN_JRW_Prog5{
     bool hasTransmitted; // boolean for whether the packet has transmitted
     Packet *packetBeingSent; // point to the packet currently being sent
     Grid *simGrid;
+    int packetsSent;
   };
 }

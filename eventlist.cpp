@@ -98,7 +98,7 @@ namespace EIN_JRW_Prog5
 
         /* Check whether it is the head node?
         if it is, delete and update the head node */
-        if (head->getData().getModifiedTime() == time &&
+        if (head->getData().getModifiedTime() <= time &&
             head->getData().getState() == s &&
             head->getData().route().previewPop() == curr)
         {
@@ -117,7 +117,7 @@ namespace EIN_JRW_Prog5
 
         /* traverse the list and check the value of each node */
         while (pDel != NULL) {
-            if (pDel->getData().getModifiedTime() == time &&
+            if (pDel->getData().getModifiedTime() <= time &&
                 pDel->getData().getState() == s &&
                 pDel->getData().route().previewPop() == curr)
             {
@@ -153,7 +153,7 @@ namespace EIN_JRW_Prog5
         EventNode* cursor = head;
         while(cursor!= NULL)
         {
-            if(cursor->getData().getModifiedTime() == time &&
+            if(cursor->getData().getModifiedTime() <= time &&
                 cursor->getData().getState() == s &&
                 cursor->getData().route().previewPop() == curr)
                 {
@@ -173,6 +173,7 @@ namespace EIN_JRW_Prog5
         {
             std::cout << "Arrived: " << cursor->getData().getArrivalTime() << " ";
             std::cout << "Modified: " << cursor->getData().getModifiedTime() << " ";
+            std::cout << "FROM : " <<cursor->getData().getSource() << " ";
             std::cout << "STATE: ";
 	    // Print out the status of the packet.
             switch (cursor->getData().getState())

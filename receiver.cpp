@@ -45,12 +45,15 @@ namespace EIN_JRW_Prog5
 
         if(events->hasRelevantEvent(simTime,DELIVERED,this))
             events->getNextRelevantEvent(simTime,DELIVERED,this);
+
+        //events->printEventList();
 	}
 
 	void Receiver::printPacketStatistics(Packet p)
 	{
 		std::cout << "Packet from " << p.getSource() << std::endl;
 		std::cout << "Response time " << p.getResponseTime() << std::endl;
+		std::cout << "packet # " << numPacketsReceived << std::endl;
 	}
 	double Receiver::getAverageResponseTime()
 	{

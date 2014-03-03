@@ -32,9 +32,10 @@ int main()
     int numPackets = 100;
     // Create the routers / receiver
     Host S1(&global,1,&hostGrid);
-    Router *M1 = new Router(&global,"M1",2,&routerGrid);
-    Router *M2 = new Router(&global,"M2",3,&routerGrid);
-    Receiver *R1 = new Receiver(&global,4,&receiverGrid,routerGrid.getYLength());
+    Host S2(&global,2,&hostGrid);
+    Router *M1 = new Router(&global,"M1",3,&routerGrid);
+    Router *M2 = new Router(&global,"M2",4,&routerGrid);
+    Receiver *R1 = new Receiver(&global,5,&receiverGrid,routerGrid.getYLength());
 
 
 
@@ -44,6 +45,7 @@ int main()
 
     vector<SimNode*> network;
     network.push_back(&S1);
+    network.push_back(&S2);
     network.push_back(M1);
     network.push_back(M2);
     network.push_back(R1);
@@ -57,26 +59,37 @@ int main()
     for(int x = 0; x < 100; ++x) // Fill host 1 with 100 packets of size (0-99)
     {
         Packet p(2,"S1",ARRIVED);
-        p.setPath(createRoutePath("1 2 3 4",network));
+        p.setPath(createRoutePath("1 3 4 5",network));
         S1.addPacket(p);
+    }
+    for(int x = 0; x < 100; ++x) // Fill host 1 with 100 packets of size (0-99)
+    {
+        Packet p(1,"S2",ARRIVED);
+        p.setPath(createRoutePath("2 3 4 5",network));
+        S2.addPacket(p);
     }
 
     printSimMap(hostGrid,routerGrid,receiverGrid);
 
      do// Run the cycle until the host gets all the packets
     {
+        //cout << "SIMTIME" << currentSimTime << endl;
+        S1.cycle(currentSimTime);
+        S2.cycle(currentSimTime);
 
-    S1.cycle(currentSimTime);
+        M1->cycle(currentSimTime);
 
-    M1->cycle(currentSimTime);
+        M2->cycle(currentSimTime);
 
-    M2->cycle(currentSimTime);
 
-    //global.printEventList();
 
-    R1->cycle(currentSimTime);
+        R1->cycle(currentSimTime);
 
-    currentSimTime++;
+        //global.printEventList();
+
+        cout << S1.getPacketsSent() << " " << S2.getPacketsSent() << endl;
+
+        currentSimTime++;
     }while(!global.isEmpty());
 
 

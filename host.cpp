@@ -13,6 +13,7 @@ namespace EIN_JRW_Prog5
         simGrid = g;
         simGrid->addObject(this);
         packetBeingSent = NULL;
+        packetsSent = 0;
     }
 
     Packet Host::getPacket()
@@ -58,6 +59,8 @@ namespace EIN_JRW_Prog5
         packetBeingSent = new Packet(); // reset the packetBeing Sent
         hasTransmitted = false;
         *packetBeingSent = p; // Set the packet being sent
+        packetsSent++;
+        std::cout << nodeID << " Sent " << packetsSent << std::endl;
 
     }
 
@@ -72,7 +75,7 @@ namespace EIN_JRW_Prog5
             }
         }
 
-        if(events->hasRelevantEvent(simTime,ARRIVED,this))
+        while(events->hasRelevantEvent(simTime,ARRIVED,this))
             events->getNextRelevantEvent(simTime,ARRIVED,this);
 
         if(packetBeingSent != NULL) // Are we processing a packet?
@@ -90,8 +93,7 @@ namespace EIN_JRW_Prog5
                 //events->printEventList();
                 hasTransmitted = true; // Set that the packet has finished transmitting
                 // No longer busy sending
-                if (events->getNextRelevantEvent(simTime,TRANSMITTED,packetBeingSent->route().previewPop()) != NULL)
-                    std::cout << "hooray";
+                events->getNextRelevantEvent(simTime,TRANSMITTED,packetBeingSent->route().previewPop());
                 Packet *temp = packetBeingSent;
                 packetBeingSent = NULL;
                 delete temp;
