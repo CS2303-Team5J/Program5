@@ -16,6 +16,7 @@ namespace EIN_JRW_Prog5
             void moveRouter(Router* r);
             void print();
             int getYLength();
+            void printBetween(Grid left, Grid center, Grid right);
         private:
             void moveObject(location cur, location next, Router* r);
             bool isOnEdge(location l);

@@ -183,4 +183,42 @@ namespace EIN_JRW_Prog5
     {
         return yLength;
     }
+
+    void Grid::printBetween(Grid left, Grid center, Grid right)
+    {
+        assert(left.xLength == center.xLength && center.xLength == right.xLength);
+
+        for(int x = 0; x < center.xLength; x++)
+        {
+            for(int y = 0; y < left.yLength; ++y)
+            {
+                if(left.idGrid[x][y] != EMPTYSPACE)
+                    std::cout << std::setw(2) << left.idGrid[x][y] << " ";
+                else
+                    std::cout << " - ";
+            }
+
+            std::cout << "|";
+
+            for(int y = 0; y < center.yLength; ++y)
+            {
+                if(center.idGrid[x][y] != EMPTYSPACE)
+                    std::cout << std::setw(2) << center.idGrid[x][y] << " ";
+                else
+                    std::cout << " - ";
+            }
+
+            std::cout << "|";
+
+            for(int y = 0; y < right.yLength; ++y)
+            {
+                if(right.idGrid[x][y] != EMPTYSPACE)
+                    std::cout << std::setw(2) << right.idGrid[x][y] << " ";
+                else
+                    std::cout << " - ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
 }

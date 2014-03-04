@@ -87,32 +87,50 @@ int main(int argc, char* argv[])
     int pkt_size;
     int SR_size;
     int routenode;
-    vector<int> SR;
+    vector<int> *SR;
 
 
 
-    cout << "test " << getNodeByID(3,network)->getID() << endl;
+    //cout << "test " << getNodeByID(3,network)->getID() << endl;
 
-    for(int x = 0; x < 1; ++x)
+    for(int x = 0; x < numSources; ++x)
     {
+        SR = new vector<int>();
         cin >> sourceID >> arrivalTime >> packets >> pkt_size >> SR_size;
         for(int y = 0; y < SR_size; ++y)
         {
             cin >> routenode;
-            SR.push_back(routenode);
+            SR->push_back(routenode);
         }
+
+//        cout << "Packet traversing ";
+//
+//        for(int j =0 ; j <SR->size(); j++)
+//        {
+//            cout << SR->at(j) << "->";
+//        }
+//        cout << endl;
 
         getNodeByID(sourceID,network)->setArrivalTime(arrivalTime);
 
+
+
         for(int z = 0; z < packets; z++)
         {
-            Packet p(pkt_size,"S" + sourceID,ARRIVED);
-            p.setPath(createRoutePath(SR,network));
+            Packet p(pkt_size,sourceID,ARRIVED);
+            p.setPath(createRoutePath(*SR,network));
             getNodeByID(sourceID,network)->addPacket(p);
+            getNodeByID(sourceID,network)->setArrivalTime(arrivalTime);
+            cout << sourceID << " arriving at " << arrivalTime << endl;
         }
+
+        delete SR;
+
+
+
     }
 
-    getNodeByID(25,network)->identifyType();
+    //getNodeByID(25,network)->identifyType();
 
 //    Host S1(&global,1,&hostGrid);
 //    Host S2(&global,2,&hostGrid);
@@ -136,23 +154,20 @@ int main(int argc, char* argv[])
     {
         for(int x = 0; x < network.size(); ++x)
         {
-            network[x]->cycle(currentSimTime);
+            if(network[x]->getArrivalTime() <= currentSimTime)
+                network[x]->cycle(currentSimTime);
         }
-        //cout << "SIMTIME" << currentSimTime << endl;
-//        S1.cycle(currentSimTime);
-//        S2.cycle(currentSimTime);
-//
-//        M1->cycle(currentSimTime);
-//
-//        M2->cycle(currentSimTime);
-//
-//
-//
-//        R1->cycle(currentSimTime);
 
+        if(currentSimTime != 0 && currentSimTime % 10 == 0)
+        {
+            printSimMap(hostGrid,routerGrid,receiverGrid);
+            cout  << endl;
+        }
+
+        //cout << " -- - - " << endl;
         //global.printEventList();
 
-        //cout << S1.getPacketsSent() << " " << S2.getPacketsSent() << endl;
+
 
         currentSimTime++;
     }while(!global.isEmpty());
@@ -168,20 +183,25 @@ int main(int argc, char* argv[])
         SimNode *s = getNodeByID(x,network);
         if(s != NULL)
         {
-        if(s->getMaxQueue() != -1)
+        if(s->getMaxQueue() > 0)
         {
-            cout << s->getID() << " "  << s->getMaxQueue() << endl;
+            cout << "Mule: " << s->getID() << "-->"  << s->getMaxQueue() << " packets" << endl;
         }
         }
     }
-//    cout << "Max queue of " << M1->getName() << " " << M1->getMaxQueue() << " packets" << std::endl;
-//    cout << "Max queue of " << M2->getName() << " " << M2->getMaxQueue() << " packets" << std::endl;
-    //cout << "Max queue of " << M3->getName() << " " << M3->getMaxQueue() << " packets" << std::endl;
-    //int numPacketsToSend = S1.getNumPackets() + S2.getNumPackets();
-    //int packetsReceived = 0;
-    // Print the average response time
 
-    cout << "Average packet response time " << getNodeByID(52,network)->getAverageResponseTime() / 1000.0 << " seconds" << endl;
+    cout << "Average packet response time " << endl;
+    for(int x = 0; x <network.size(); x++)
+    {
+        SimNode *s = getNodeByID(x,network);
+        if(s != NULL)
+        {
+            if(s->getAverageResponseTime() > 0.0)
+            {
+                cout << "Host: " << s->getID() << "->"  << s->getAverageResponseTime() / 1000.00 << " seconds "<< endl;
+            }
+        }
+    }
     return 0;
 }
 
@@ -189,29 +209,18 @@ int main(int argc, char* argv[])
 
 Stack<SimNode*> createRoutePath(std::vector<int> desiredPath,std::vector<SimNode*> networkNodes)
 {
-//        std::string delim = " ";
-//        int start = 0;
-//        int end;
-//        std::vector<std::string> splitString;
         Stack<SimNode*> route;
-//        // Until find returns nothing (string::npos)
-//        while((end = inputpath.find(delim,start)) != std::string::npos)
-//        {
-//            // Get the substring up to the delimter
-//            // end is the position of the delimiting string
-//            splitString.push_back(inputpath.substr(start,end-start));
-//            start = end + delim.size();
-//        }
-//        // Get the last remaining word
-//        splitString.push_back(inputpath.substr(start));
 
-        for(int i = 0; i < networkNodes.size(); i++)
+        for(int i = 0; i < desiredPath.size(); i++)
         {
-            for(int x = 0; x < desiredPath.size(); ++x)
+            for(int x = 0; x < networkNodes.size(); ++x)
             {
                 //cout << networkNodes[x]->getID() << ": " << networkNodes[x] << endl;
-                if(networkNodes[i]->getID() == desiredPath[x])
-                    route.push(networkNodes[i]);
+                if(networkNodes[x]->getID() == desiredPath[i])
+                {
+                    cout << networkNodes[x]->getID() << endl;
+                    route.push(networkNodes[x]);
+                }
             }
         }
 
@@ -220,9 +229,7 @@ Stack<SimNode*> createRoutePath(std::vector<int> desiredPath,std::vector<SimNode
 
 void printSimMap(Grid hosts, Grid routers, Grid receivers)
 {
-    hosts.print();
-    routers.print();
-    receivers.print();
+    routers.printBetween(hosts,routers,receivers);
 }
 
 SimNode* getNodeByID(int id, std::vector<SimNode*> networkNodes)

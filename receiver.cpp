@@ -29,6 +29,7 @@ namespace EIN_JRW_Prog5
 		p.setReceived(simTime); // Set the received time
 		events->addModifiedEvent(p); // Add to the event list
 		numPacketsReceived++;
+        std::cout << "[" << simTime << "] "<< " packet delivered to receiver "  << this->getID();
 		printPacketStatistics(p);
 		totalResponseTime += p.getResponseTime();
 	}
@@ -39,7 +40,8 @@ namespace EIN_JRW_Prog5
         {
             EventNode* nextEvent = events->getNextRelevantEvent(simTime,PROPAGATED,this);
             Packet received = nextEvent->getData();
-            std::cout << "Receiver received packet " << std::endl;
+
+            //printPacketStatistics()
             this->receivePacket(received,simTime);
         }
 
@@ -51,14 +53,13 @@ namespace EIN_JRW_Prog5
 
 	void Receiver::printPacketStatistics(Packet p)
 	{
-		std::cout << "Packet from " << p.getSource() << std::endl;
-		std::cout << "Response time " << p.getResponseTime() << std::endl;
-		std::cout << "packet # " << numPacketsReceived << std::endl;
+		std::cout << "  from host " << p.getSource() << " ";
+		std::cout << "w/ response time " << p.getResponseTime() << std::endl;
 	}
 	double Receiver::getAverageResponseTime()
 	{
 		if(numPacketsReceived != 0)
-			return totalResponseTime / numPacketsReceived;
+			return (double) totalResponseTime / (double)numPacketsReceived;
 		else
 			return 0.0;
 	}

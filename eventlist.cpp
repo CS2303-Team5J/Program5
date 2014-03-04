@@ -173,6 +173,7 @@ namespace EIN_JRW_Prog5
         {
             std::cout << "Arrived: " << cursor->getData().getArrivalTime() << " ";
             std::cout << "Modified: " << cursor->getData().getModifiedTime() << " ";
+            std::cout << "Going to " << cursor->getData().route().previewPop() << " ";
             std::cout << "FROM : " <<cursor->getData().getSource() << " ";
             std::cout << "STATE: ";
 	    // Print out the status of the packet.

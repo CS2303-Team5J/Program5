@@ -27,7 +27,7 @@ namespace EIN_JRW_Prog5
         else
         {
             // No packet was found. Return a bad packet
-            Packet *noPacket = new Packet(-1,"something bad happened...",ARRIVED);
+            Packet *noPacket = new Packet(-1,-1,ARRIVED);
             return *noPacket;
         }
     }
@@ -36,8 +36,9 @@ namespace EIN_JRW_Prog5
         Packet p  = this->getPacket(); // Get the next packet to send
         p.setArrival(simTime);
         //p.printPath();
-        events->addNewEvent(p); // Add to the event list that the packet arrived
-        //std::cout << "arrived at " << simTime << std::endl;
+        events->addNewEvent(p);
+        // Add to the event list that the packet arrived
+        std::cout << "[" << simTime << "] "<< " packet arrived at host " << this->getID() << std::endl;
         //std::cout << " - - -" << std::endl;
 
         //events->printEventList();
@@ -50,17 +51,21 @@ namespace EIN_JRW_Prog5
 
         SimNode *nextDest  = p.route().previewPop();
         sendTimeRem = p.getSize() + p.calculatePropTime(this->getLocation(),nextDest->getLocation());
+        std::cout << "[" << simTime << "] "<< " started sending packet from host" << this->getID() << std::endl;
+
         p.setState(TRANSMITTED,simTime+p.getSize());
         events->addModifiedEvent(p);
         p.setState(PROPAGATED,simTime+sendTimeRem);
         events->addModifiedEvent(p);
-        //sendTimeRem = 5;
+
         sendTime = sendTimeRem;
         packetBeingSent = new Packet(); // reset the packetBeing Sent
         hasTransmitted = false;
         *packetBeingSent = p; // Set the packet being sent
         packetsSent++;
-        std::cout << nodeID << " Sent " << packetsSent << std::endl;
+
+
+        //std::cout << nodeID << " Sent " << packetsSent << std::endl;
 
     }
 
@@ -94,6 +99,7 @@ namespace EIN_JRW_Prog5
                 hasTransmitted = true; // Set that the packet has finished transmitting
                 // No longer busy sending
                 events->getNextRelevantEvent(simTime,TRANSMITTED,packetBeingSent->route().previewPop());
+                std::cout << "[" << simTime << "] "<< " packet transmitted from host " << this->getID() << std::endl;
                 Packet *temp = packetBeingSent;
                 packetBeingSent = NULL;
                 delete temp;

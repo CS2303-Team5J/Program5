@@ -6,7 +6,7 @@
 
 namespace EIN_JRW_Prog5
 {
-    Packet::Packet(int numBits, std::string source, state initState, int arrival)
+    Packet::Packet(int numBits, int source, state initState, int arrival)
     {
         bitSize = numBits;
         this->source = source;
@@ -38,6 +38,10 @@ namespace EIN_JRW_Prog5
 
     int Packet::calculatePropTime(location start, location endPoint)
     {
+        if(start.GetxCoord() == endPoint.GetxCoord() && start.GetyCoord() == endPoint.GetyCoord())
+        {
+            return 0; // Not supposed to happen
+        }
         return ceil(logbase2(distance(start.GetxCoord(),start.GetyCoord(),
                                       endPoint.GetxCoord(),endPoint.GetyCoord())));
     }

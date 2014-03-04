@@ -39,8 +39,11 @@ namespace EIN_JRW_Prog5
         SimNode *nextDest  = p.route().previewPop();
 
 
+
         sendTimeRem = p.getSize() + p.calculatePropTime(this->getLocation(),nextDest->getLocation());
         sendTime = sendTimeRem;
+        std::cout << "[" << simTime << "] "<< " started sending packet from mule " << this->getID() << std::endl;
+
 
         p.setState(TRANSMITTED,simTime+p.getSize());
         events->addModifiedEvent(p);
@@ -61,7 +64,7 @@ namespace EIN_JRW_Prog5
   {
 
         //p.route().pop(); // Packet made it to destination. Remove it
-        std::cout << "Got packet at " << nodeID << std::endl;
+        //std::cout << "Got packet at " << nodeID << std::endl;
         packetQueue.enqueue(p);
         //packetQueue.printQueue();
 
@@ -82,7 +85,7 @@ namespace EIN_JRW_Prog5
             EventNode* nextEvent = events->getNextRelevantEvent(simTime,PROPAGATED,this);
             Packet received = nextEvent->getData();
             //std::cout << "received packet " << std::endl;
-
+            std::cout << "[" << simTime << "] "<< " packet arrived/propagated at mule " << this->getID() << std::endl;
             //std::cout << "with destination " << std::cout << received.route().previewPop() << std::endl;
             //printPath();
             //std::cout << received.route().getSize() << std::endl;
@@ -120,6 +123,7 @@ namespace EIN_JRW_Prog5
                 hasTransmitted = true; // Set that the packet has finished transmitting
                 // No longer busy sending
                 events->getNextRelevantEvent(simTime,TRANSMITTED,packetBeingSent->route().previewPop());
+                std::cout << "[" << simTime << "] "<< " packet transmitted from mule " << this->getID() << std::endl;
                 Packet *temp = packetBeingSent;
                 packetBeingSent = NULL;
                 delete temp;
