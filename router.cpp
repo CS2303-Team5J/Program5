@@ -6,10 +6,12 @@
 #include "grid.h"
 #include <iostream>
 #include <string>
+#define ENABLEPQ 0
 
 namespace EIN_JRW_Prog5
 {
 
+  //Jacob Watson (jrwatson@wpi.edu)
   Router::Router(EventList* e, std::string name, int id,Grid* g)
   {
     events = e;
@@ -24,25 +26,43 @@ namespace EIN_JRW_Prog5
 
     simGrid->addObject(this);
 
+    smallPacketQueue = FCFSqueue();
+    mediumPacketQueue = FCFSqueue();
+    largePacketQueue = FCFSqueue();
+
   }
 
 
+  //Jacob Watson (jrwatson@wpi.edu)
   // Send the next packet in queue to a router
   void Router::sendPacket(int simTime)
   {
-        //packetQueue.printQueue();
-        Packet p  = this->packetQueue.dequeue(); // Get the next packet to send
-        //std::cout << "Queue at " << nodeID;
 
-        //events->addNewEvent(p); // Add to the event list that the packet arrived
-        p.route().pop();
-        SimNode *nextDest  = p.route().previewPop();
+        Packet p;
+
+        if(ENABLEPQ == 0)
+            p  = this->packetQueue.dequeue(); // Get the next packet to send
+        else{
+            // Send the smallest packet
+            if(!smallPacketQueue.isEmpty())
+                p = smallPacketQueue.dequeue();
+            else if (!mediumPacketQueue.isEmpty())
+                p = mediumPacketQueue.dequeue();
+            else if (!largePacketQueue.isEmpty())
+                p = largePacketQueue.dequeue();
+        }
 
 
+        p.route().pop(); // Pop the destination because it arrived successfully
+        SimNode *nextDest  = p.route().previewPop(); // Get the next destination
 
+
+        // Calculate send time based on size and prop time
         sendTimeRem = p.getSize() + p.calculatePropTime(this->getLocation(),nextDest->getLocation());
         sendTime = sendTimeRem;
-        std::cout << "[" << simTime << "] "<< " started sending packet from mule " << this->getID() << std::endl;
+
+        // Announce the added events
+        std::cout << "[" << simTime << "] "<< " started sending(transmitting) packet from mule " << this->getID() << std::endl;
 
 
         p.setState(TRANSMITTED,simTime+p.getSize());
@@ -57,56 +77,72 @@ namespace EIN_JRW_Prog5
 
         *packetBeingSent = p; // Set the packet being sent
 
-    //r->receivePacket(p,events,simTime);
+
   }
+//Jacob Watson (jrwatson@wpi.edu)
   // Receive a packet
   void Router::receivePacket(Packet p,int simTime)
   {
 
-        //p.route().pop(); // Packet made it to destination. Remove it
-        //std::cout << "Got packet at " << nodeID << std::endl;
-        packetQueue.enqueue(p);
-        //packetQueue.printQueue();
+        // Put the packet on the queue
+        if(ENABLEPQ == 0) // is priority queue on?
+            packetQueue.enqueue(p);
+        else
+        {
+            // Put the packet in a queue according to its size
+            if(p.getSize() == 1)
+                smallPacketQueue.enqueue(p);
+            else if(p.getSize() == 2)
+                mediumPacketQueue.enqueue(p);
+            else if(p.getSize() >= 3)
+                largePacketQueue.enqueue(p);
+        }
 
-        //events->getNextRelevantEvent(simTime,PROPAGATED,this);
-        p.setState(RECIEVED,simTime); // It has also been received (implied)
+
+        p.setState(RECIEVED,simTime); // It has also been received (implied with being propagated)
         events->addModifiedEvent(p);
-        //std::cout << "- - - " << std::endl;
-        //events->printEventList();
-        //std::cout << name << ": "; // print the packet name for debugging
-        //packetQueue.printQueue();
 
   }
+//Jacob Watson (jrwatson@wpi.edu)
   void Router::cycle(int simTime)
   {
-
+        // Is there a packet that is supposed to arrive here?
         while(events->hasRelevantEvent(simTime,PROPAGATED,this))
         {
+            // Receive it
             EventNode* nextEvent = events->getNextRelevantEvent(simTime,PROPAGATED,this);
             Packet received = nextEvent->getData();
-            //std::cout << "received packet " << std::endl;
+
             std::cout << "[" << simTime << "] "<< " packet arrived/propagated at mule " << this->getID() << std::endl;
-            //std::cout << "with destination " << std::cout << received.route().previewPop() << std::endl;
-            //printPath();
-            //std::cout << received.route().getSize() << std::endl;
-            //events->printEventList();
+
             this->receivePacket(received,simTime);
         }
 
+        // Is the queue the largest is has ever been?
         if(packetQueue.sizeOf() > maxQueueSize) // Is the queue the biggest it has been?
         {
             maxQueueSize = packetQueue.sizeOf();
         }
+
+
         if(packetBeingSent == NULL)// Is there a packet being sent?
         {
-            // Do we have another packet to send?
-            if(!packetQueue.isEmpty())
+            if(ENABLEPQ == 0)
             {
-                sendPacket(simTime);
+                // Do we have another packet to send?
+                if(!packetQueue.isEmpty())
+                {
+                    sendPacket(simTime);
+                }
+            }
+            else
+            {
+                if(!smallPacketQueue.isEmpty() || !mediumPacketQueue.isEmpty() || !largePacketQueue.isEmpty())
+                    sendPacket(simTime);
             }
         }
 
-
+        // Remove received events (they have already been processed
         if(events->hasRelevantEvent(simTime,RECIEVED,this))
             events->getNextRelevantEvent(simTime,RECIEVED,this);
 
@@ -116,10 +152,6 @@ namespace EIN_JRW_Prog5
 
             if(sendTimeRem < sendTime - packetBeingSent->getSize() && !hasTransmitted) // Has the packet finished transmitting?
             {
-                //packetBeingSent->setState(TRANSMITTED,simTime); // Set the state to transmitted
-                //events->addModifiedEvent(*packetBeingSent); // Add that event to the event list
-                //std::cout << " -- - -" << std::endl;
-                //events->printEventList();
                 hasTransmitted = true; // Set that the packet has finished transmitting
                 // No longer busy sending
                 events->getNextRelevantEvent(simTime,TRANSMITTED,packetBeingSent->route().previewPop());
@@ -129,60 +161,45 @@ namespace EIN_JRW_Prog5
                 delete temp;
             }
 
-//            if(sendTimeRem <= sendTime - packetBeingSent->getSize() && !hasTransmitted) // Has the packet transmitted?
-//            {
-//                packetBeingSent->setState(TRANSMITTED,simTime); // Mark transmitted
-//                events->addModifiedEvent(*packetBeingSent); // add to event list
-//                Packet *temp = packetBeingSent;
-//                hasTransmitted = true;
-//                packetBeingSent = NULL;
-//                delete temp;
-//
-//            }
-
-//            if(sendTimeRem <= 0) // Is the packet done sending?
-//            {
-//                SimNode *nextDest = packetBeingSent->route().previewPop();
-//                nextDest->receivePacket(*packetBeingSent,simTime); // make sure the router has the packet
-//                Packet *temp = packetBeingSent; // delete packet from cache
-//                packetBeingSent = NULL;
-//                delete temp;
-//            }
         }
+        // Move the router every second
         if(simTime != 0 && simTime % 10 == 0)
         {
             simGrid->moveRouter(this);
-            //simGrid->print();
         }
   }
 
 
+  //Jacob Watson (jrwatson@wpi.edu)
   void Router::setDirection(Direction dir)
   {
         this->rDir = dir;
   }
 
+  //Jacob Watson (jrwatson@wpi.edu)
   void Router::setLocation(location newLoc)
   {
         this->nodeLoc = newLoc;
   }
 
+  //Jacob Watson (jrwatson@wpi.edu)
   Direction Router::getDirection()
   {
         return this->rDir;
   }
 
+    //Jacob Watson (jrwatson@wpi.edu)
   location Router::getLocation()
   {
         return this->nodeLoc;
   }
-
+    //Jacob Watson (jrwatson@wpi.edu)
   int Router::getID()
   {
     return this->nodeID;
   }
 
-
+   //Jacob Watson (jrwatson@wpi.edu)
   Direction Router::directionBasedOnID(int id)
   {
         int direction = id % 4;
@@ -199,7 +216,7 @@ namespace EIN_JRW_Prog5
         }
         return NORTH;
   }
-
+  //Jacob Watson (jrwatson@wpi.edu)
     void Router::identifyType()
     {
         std::cout << "Router " << std::endl;

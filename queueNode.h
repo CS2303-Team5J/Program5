@@ -1,4 +1,4 @@
-// Jacob Watson (jrwatson@wpi.edu)
+// Jacob Watson (jrwatson@wpi.edu) (entire file)
 #ifndef QUEUENODE_H
 #define QUEUENODE_H
 #include "packet.h"

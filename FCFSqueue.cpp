@@ -1,8 +1,8 @@
-// Author: Jacob Watson (jrwatson@wpi.edu) (entire file)
 #include "FCFSqueue.h"
 #include <iostream>
 namespace EIN_JRW_Prog5
 {
+    // Author: Jacob Watson (jrwatson@wpi.edu)
 	void FCFSqueue::enqueue(Packet p)
 	{
 		QueueNode *newPtr = new QueueNode(p);
@@ -22,6 +22,7 @@ namespace EIN_JRW_Prog5
 		}
 	}
 
+    // Author: Jacob Watson (jrwatson@wpi.edu)
   Packet FCFSqueue::dequeue()
   {
     QueueNode* tempPtr = headPtr;
@@ -38,11 +39,15 @@ namespace EIN_JRW_Prog5
 
   }
 
+  // Author: Jacob Watson (jrwatson@wpi.edu)
+  // Is the queue empty?
   bool FCFSqueue::isEmpty()
   {
     return headPtr == NULL;
   }
 
+  // Author: Jacob Watson (jrwatson@wpi.edu)
+  // Print the queue
   void FCFSqueue::printQueue()
   {
     QueueNode *cursor = headPtr;

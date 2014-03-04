@@ -1,4 +1,3 @@
-// Author Jacob Watson (jrwatson@wpi.edu)  | Erik Nadel (einadel@wpi.edu)
 #include "packet.h"
 #include "host.h"
 #include <iostream>
@@ -6,6 +5,7 @@
 namespace EIN_JRW_Prog5
 {
 
+    //Author Erik Nadel (einadel@wpi.edu)
     Host::Host(EventList* e, int id, Grid* g)
     {
         events = e;
@@ -16,6 +16,7 @@ namespace EIN_JRW_Prog5
         packetsSent = 0;
     }
 
+    // Author Jacob Watson (jrwatson@wpi.edu)
     Packet Host::getPacket()
     {
         if(packets.size() != 0) // Is there a packet to get?
@@ -31,44 +32,46 @@ namespace EIN_JRW_Prog5
             return *noPacket;
         }
     }
+
+    //Author Erik Nadel (einadel@wpi.edu)
     void Host::sendPacket(int simTime)
     {
         Packet p  = this->getPacket(); // Get the next packet to send
         p.setArrival(simTime);
-        //p.printPath();
-        events->addNewEvent(p);
+
+        events->addNewEvent(p); // Simulate the arrival of the packet at this time
+
         // Add to the event list that the packet arrived
         std::cout << "[" << simTime << "] "<< " packet arrived at host " << this->getID() << std::endl;
-        //std::cout << " - - -" << std::endl;
 
-        //events->printEventList();
-
-        // Remove the arrival event
 
 
         // Remove this host from the route
         p.route().pop();
 
         SimNode *nextDest  = p.route().previewPop();
+        packetsSent++;
         sendTimeRem = p.getSize() + p.calculatePropTime(this->getLocation(),nextDest->getLocation());
-        std::cout << "[" << simTime << "] "<< " started sending packet from host" << this->getID() << std::endl;
+        std::cout << "[" << simTime << "] "<< " started sending packet " << packetsSent << " from host" << this->getID() << std::endl;
 
+        // Add the future events to the event list
         p.setState(TRANSMITTED,simTime+p.getSize());
         events->addModifiedEvent(p);
         p.setState(PROPAGATED,simTime+sendTimeRem);
         events->addModifiedEvent(p);
 
+        // Make the host busy during transmittion time
         sendTime = sendTimeRem;
         packetBeingSent = new Packet(); // reset the packetBeing Sent
         hasTransmitted = false;
         *packetBeingSent = p; // Set the packet being sent
-        packetsSent++;
 
 
-        //std::cout << nodeID << " Sent " << packetsSent << std::endl;
+
 
     }
 
+    //Author Erik Nadel (einadel@wpi.edu)
     void Host::cycle(int simTime)
     {
         if(packetBeingSent == NULL)
@@ -80,6 +83,7 @@ namespace EIN_JRW_Prog5
             }
         }
 
+        // Get rid of a arrived events
         while(events->hasRelevantEvent(simTime,ARRIVED,this))
             events->getNextRelevantEvent(simTime,ARRIVED,this);
 
@@ -88,14 +92,8 @@ namespace EIN_JRW_Prog5
 
             sendTimeRem--;
 
-
-
             if(sendTimeRem < sendTime - packetBeingSent->getSize() && !hasTransmitted) // Has the packet finished transmitting?
             {
-                //packetBeingSent->setState(TRANSMITTED,simTime); // Set the state to transmitted
-                //events->addModifiedEvent(*packetBeingSent); // Add that event to the event list
-                //std::cout << " -- - -" << std::endl;
-                //events->printEventList();
                 hasTransmitted = true; // Set that the packet has finished transmitting
                 // No longer busy sending
                 events->getNextRelevantEvent(simTime,TRANSMITTED,packetBeingSent->route().previewPop());
@@ -105,21 +103,11 @@ namespace EIN_JRW_Prog5
                 delete temp;
             }
 
-//            if(sendTimeRem <= 0) // Is the packet done sending?
-//            {
-//                //packetBeingSent->printPath();
-//                SimNode *nextDest = packetBeingSent->route().previewPop();
-//                nextDest->receivePacket(*packetBeingSent,simTime); // Put the packet at the router.
-//                Packet *temp = packetBeingSent; // Delete the packet being sent from the router cache
-//                packetBeingSent = NULL;
-//                delete temp;
-//            }
-
-
         }
 
     }
 
+    // Author Jacob Watson (jrwatson@wpi.edu)
     location Host::getLocation()
     {
         return location(this->nodeLoc.GetxCoord(),-1);

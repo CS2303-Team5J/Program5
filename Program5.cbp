@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="20 13 16 30 &lt;prog5.txt" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -20,7 +21,29 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="FCFSqueue.cpp" />
+		<Unit filename="FCFSqueue.h" />
+		<Unit filename="eventlist.cpp" />
+		<Unit filename="eventlist.h" />
+		<Unit filename="eventnode.h" />
+		<Unit filename="grid.cpp" />
+		<Unit filename="grid.h" />
+		<Unit filename="host.cpp" />
+		<Unit filename="host.h" />
+		<Unit filename="location.cpp" />
+		<Unit filename="location.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="packet.cpp" />
+		<Unit filename="packet.h" />
+		<Unit filename="queue.h" />
+		<Unit filename="queueNode.h" />
+		<Unit filename="receiver.cpp" />
+		<Unit filename="receiver.h" />
+		<Unit filename="router.cpp" />
+		<Unit filename="router.h" />
+		<Unit filename="senderStats.h" />
+		<Unit filename="simnode.cpp" />
+		<Unit filename="simnode.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

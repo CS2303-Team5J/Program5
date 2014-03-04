@@ -1,4 +1,4 @@
-// Author: Erik Nadel (einadel@wpi.edu) (entire file)
+
 #include "eventnode.h"
 #include "eventlist.h"
 #include "packet.h"
@@ -6,11 +6,14 @@
 
 namespace EIN_JRW_Prog5
 {
+    //Author Erik Nadel (einadel@wpi.edu)
 	EventList::EventList()
 	{
 		head = NULL;
 	}
 
+    //Author Erik Nadel (einadel@wpi.edu)
+    // Add a new event to the event list
 	void EventList::addNewEvent(Packet p)
 	{
 		EventNode* cursor;
@@ -54,6 +57,8 @@ namespace EIN_JRW_Prog5
 	    	tail = cursor;
 	    }
 	}
+    //Author Erik Nadel (einadel@wpi.edu)
+	// Add a modified existing event to the event list
 	void EventList::addModifiedEvent(Packet p)
 	{
         EventNode* cursor;
@@ -89,65 +94,61 @@ namespace EIN_JRW_Prog5
 	    	}
 	    }
 	}
-	// Gets the next event on the event list
+	//Author Erik Nadel (einadel@wpi.edu) | mixed with some code from http://runnable.com/Us53QO5op1hWAACi/how-to-remove-a-node-from-a-linked-list-for-c%2B%2B
+	// Gets the next event on the event list if it is relevant to the parameters given
 	EventNode* EventList::getNextRelevantEvent(int time, state s, SimNode* curr)
 	{
 
-        EventNode *pPre = NULL, *pDel = NULL;
+        EventNode *cursor = NULL;
+        EventNode *toDelete = NULL;
         EventNode *relevant = new EventNode();
 
-        /* Check whether it is the head node?
-        if it is, delete and update the head node */
+        // Is the head what we are looking for?
         if (head->getData().getModifiedTime() <= time &&
             head->getData().getState() == s &&
             head->getData().route().previewPop() == curr)
         {
-            /* point to the node to be deleted */
+            // Delete and return what was at the head
             *relevant = *head;
             relevant->getData().route() = head->getData().route();
-            pDel = head;
-            /* update */
-            head = pDel->link();
-            delete pDel;
+            toDelete = head;
+            head = toDelete->link();
+            delete toDelete;
             return relevant;
         }
 
-        pPre = head;
-        pDel = head->link();
+        cursor = head;
+        toDelete = head->link();
 
-        /* traverse the list and check the value of each node */
-        while (pDel != NULL) {
-            if (pDel->getData().getModifiedTime() <= time &&
-                pDel->getData().getState() == s &&
-                pDel->getData().route().previewPop() == curr)
+        // Traverse until something comes up
+        while (toDelete != NULL) {
+            if (toDelete->getData().getModifiedTime() <= time &&
+                toDelete->getData().getState() == s &&
+                toDelete->getData().route().previewPop() == curr)
             {
-                //std::cout << pDel->getData().route().previewPop();
-                //pDel->getData().printPath();
-                *relevant = *pDel;
-                relevant->getData().route() = pDel->getData().route();
-                /* Update the list */
-                pPre->link() = pDel->link();
-                /* If it is the last node, update the tail */
-                if (pDel == tail) {
-                    tail = pPre;
+                // If something comes up, delete and return what was there
+                *relevant = *toDelete;
+                relevant->getData().route() = toDelete->getData().route();
+
+                cursor->link() = toDelete->link();
+
+                if (toDelete == tail) {
+                    tail = cursor;
                 }
 
-                delete pDel; /* Here only remove the first node with the given value */
-                return relevant; /* break and return */
+                delete toDelete;
+                return relevant;
             }
-            pPre = pDel;
-            pDel = pDel->link();
-//	        EventNode *temp = head;
-//	        head = head->link(); // Sets head to next link
-//	        EventNode tempNode = *temp;
-//	        temp->link() = NULL;
-//	        delete temp;
-//	        return tempNode;
+            cursor = toDelete;
+            toDelete = toDelete->link();
         }
-        // Nothing was deleted
+        // Nothing was taken out
+        // Didnt find anything
         return NULL;
 	}
 
+    //Author Erik Nadel (einadel@wpi.edu)
+    // Does the eventlist have anything needed by the parameters?
 	bool EventList::hasRelevantEvent(int time, state s, SimNode* curr)
 	{
         EventNode* cursor = head;
@@ -166,6 +167,7 @@ namespace EIN_JRW_Prog5
 
 
 	// Print out the event list
+    //Author Erik Nadel (einadel@wpi.edu)
 	void EventList::printEventList()
 	{
         EventNode *cursor = head;
@@ -200,6 +202,8 @@ namespace EIN_JRW_Prog5
         }
 	}
 
+    // Is the event list empty?
+    //Author Erik Nadel (einadel@wpi.edu)
 	bool EventList::isEmpty()
 	{
         return head == NULL;

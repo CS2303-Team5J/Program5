@@ -7,29 +7,37 @@
 
 namespace EIN_JRW_Prog5
 {
+
+    //Author Erik Nadel (einadel@wpi.edu)
     Grid::Grid()
     {
         idGrid = NULL;
         xLength = 0;
         yLength = 0;
     }
+    //Author Erik Nadel (einadel@wpi.edu)
     Grid::Grid(int xDim, int yDim)
     {
+        // Initialize 2d array
         idGrid = new int*[xDim];
         for (int i = 0 ; i < xDim ; i++)
             idGrid[i] = new int[yDim];
+
         xLength = xDim;
         yLength = yDim;
+
+
         // fill grid with empty spaces
-        for(size_t x = 0; x < xLength; ++x)
+        for(int x = 0; x < xLength; ++x)
         {
-            for(size_t y = 0; y < yLength; ++y)
+            for(int y = 0; y < yLength; ++y)
             {
                 idGrid[x][y] = EMPTYSPACE;
             }
         }
     }
-
+    //Author Erik Nadel (einadel@wpi.edu)
+    // Move a router based on its direction
     void Grid::moveRouter(Router* r)
     {
         //printf("toMove x: d toMove y: %d \n", toMove->posX, toMove->posY);
@@ -53,10 +61,11 @@ namespace EIN_JRW_Prog5
 
     }
 
-
+    //Author Erik Nadel (einadel@wpi.edu)
+    // Helper method for moveRouter
     void Grid::moveObject(location cur, location next, Router *r)
     {
-        // Handle a player trying to bounce on a wall.
+        // Handle a router trying to bounce on a wall.
         if(this->isOnEdge(next))
         {
             int fixedX = next.GetxCoord();
@@ -128,6 +137,7 @@ namespace EIN_JRW_Prog5
         }
     }
 
+    //Author Erik Nadel (einadel@wpi.edu)
     bool Grid::isOnEdge(location l)
     {
         // Cover X boundaries
@@ -141,11 +151,15 @@ namespace EIN_JRW_Prog5
             return false;
     }
 
+    //Author Erik Nadel (einadel@wpi.edu)
+    // Is the location occupied??
     bool Grid::isOccupied(location l)
     {
         return idGrid[l.GetxCoord()][l.GetyCoord()] != EMPTYSPACE;
     }
 
+    //Author Erik Nadel (einadel@wpi.edu)
+    // Print the grid
     void Grid::print()
     {
         for(int x = 0; x < xLength; ++x)
@@ -160,11 +174,13 @@ namespace EIN_JRW_Prog5
             std::cout << std::endl;
         }
     }
-
+// Author Jacob Watson (jrwatson@wpi.edu)
+    // Add a node to the grid
     void Grid::addObject(SimNode *r)
     {
         bool placed = false;
 
+        // Keep trying to place until a spot has been found
         while(!placed)
         {
             int x = rand() % xLength;
@@ -178,18 +194,22 @@ namespace EIN_JRW_Prog5
             }
         }
     }
-
+// Author Jacob Watson (jrwatson@wpi.edu)
+    // How long is the grid? for receiver calc time purposes
     int Grid::getYLength()
     {
         return yLength;
     }
-
+// Author Jacob Watson (jrwatson@wpi.edu)
+    // Print center grid between left and right grid
     void Grid::printBetween(Grid left, Grid center, Grid right)
     {
+        // Their height needs to be the same
         assert(left.xLength == center.xLength && center.xLength == right.xLength);
 
         for(int x = 0; x < center.xLength; x++)
         {
+            // Traverse through the row of every grid and print what is there
             for(int y = 0; y < left.yLength; ++y)
             {
                 if(left.idGrid[x][y] != EMPTYSPACE)
@@ -198,7 +218,7 @@ namespace EIN_JRW_Prog5
                     std::cout << " - ";
             }
 
-            std::cout << "|";
+            std::cout << "|"; // Seperator
 
             for(int y = 0; y < center.yLength; ++y)
             {
@@ -208,7 +228,7 @@ namespace EIN_JRW_Prog5
                     std::cout << " - ";
             }
 
-            std::cout << "|";
+            std::cout << "|"; // Seperator
 
             for(int y = 0; y < right.yLength; ++y)
             {

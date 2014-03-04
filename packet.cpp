@@ -6,6 +6,7 @@
 
 namespace EIN_JRW_Prog5
 {
+    // Author Jacob Watson (jrwatson@wpi.edu)
     Packet::Packet(int numBits, int source, state initState, int arrival)
     {
         bitSize = numBits;
@@ -14,20 +15,26 @@ namespace EIN_JRW_Prog5
         arrived = arrival;
         this->timeReceived = timeReceived;
         timeModified = 0;
-        sourceRoute = Stack<SimNode*>();
+        sourceRoute = Queue<SimNode*>();
     }
 
-    Stack<SimNode*>& Packet::route()
+// Author Jacob Watson (jrwatson@wpi.edu)
+
+    // Get the route of a packet
+    Queue<SimNode*>& Packet::route()
     {
         return this->sourceRoute;
     }
 
+// Author Jacob Watson (jrwatson@wpi.edu)
+    // Calculate the log(2) of a number
     double logbase2(double num)
     {
         // Using a property of logarithms, we are able to calculate log(2) with the traditional log(10)
         return log10(num) / log10(2);
     }
 
+// Author Jacob Watson (jrwatson@wpi.edu)
     // Calculates the Euclidiean distance between two points
     double distance(int x1, int y1, int x2, int y2)
     {
@@ -35,23 +42,26 @@ namespace EIN_JRW_Prog5
         return result;
     }
 
-
+// Author Jacob Watson (jrwatson@wpi.edu)
+    // Calculate the propegation time of a packet between two destinations
     int Packet::calculatePropTime(location start, location endPoint)
     {
         if(start.GetxCoord() == endPoint.GetxCoord() && start.GetyCoord() == endPoint.GetyCoord())
         {
             return 0; // Not supposed to happen
         }
-        return ceil(logbase2(distance(start.GetxCoord(),start.GetyCoord(),
+        return (int) ceil(logbase2(distance(start.GetxCoord(),start.GetyCoord(),
                                       endPoint.GetxCoord(),endPoint.GetyCoord())));
     }
-
+// Author Jacob Watson (jrwatson@wpi.edu)
+    // Print the path of the packet
     void Packet::printPath()
     {
         sourceRoute.printData();
     }
-
-    void Packet::setPath(Stack<SimNode*> networkPath)
+// Author Jacob Watson (jrwatson@wpi.edu)
+    // Set the path of the packet
+    void Packet::setPath(Queue<SimNode*> networkPath)
     {
         sourceRoute = networkPath;
     }

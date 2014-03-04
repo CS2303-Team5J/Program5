@@ -48,13 +48,13 @@ namespace EIN_JRW_Prog5 {
 	// Get the arrival time of the packet
     int getArrivalTime() {return arrived;}
 
-    void setPath(Stack<SimNode*> networkNodes);
+    void setPath(Queue<SimNode*> networkNodes);
 
     void printPath();
 
     int calculatePropTime(location start, location endPoint);
 
-    Stack<SimNode*>& route();
+    Queue<SimNode*>& route();
   private:
     int bitSize; // 1 2 or 3
     int source;
@@ -62,7 +62,7 @@ namespace EIN_JRW_Prog5 {
     int arrived;
     int timeReceived;
     state currentState;
-    Stack<SimNode*> sourceRoute;
+    Queue<SimNode*> sourceRoute;
   };
 }
 #endif

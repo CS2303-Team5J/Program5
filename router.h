@@ -1,4 +1,4 @@
-// Author Jacob Watson (jrwatson@wpi.edu)
+// Author Jacob Watson (jrwatson@wpi.edu) | Erik Nadel (einadel@wpi.edu)
 #ifndef ROUTER_H
 #define ROUTER_H
 #include "FCFSqueue.h"
@@ -30,17 +30,26 @@ class Router : public SimNode
   int getMaxQueue() { return maxQueueSize;}
     // Get the location of the router
   location getLocation();
+    // Get the ID of the router
   int getID();
+    // Get the direction of the router
   Direction getDirection();
+    // Set the direction of the router
   void setDirection(Direction dir);
+    // Set the location of the router
   void setLocation(location newLoc);
+    // identify that this is a router
   void identifyType();
 
  private:
 
+    // Generate a direction based on the id
   Direction directionBasedOnID(int id);
 
   FCFSqueue packetQueue;
+  FCFSqueue smallPacketQueue;
+  FCFSqueue mediumPacketQueue;
+  FCFSqueue largePacketQueue;
   EventList *events;
   Packet *packetBeingSent;
   int sendTimeRem;

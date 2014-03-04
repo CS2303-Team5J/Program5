@@ -1,4 +1,4 @@
-// Author Erik Nadel (einadel@wpi.edu) | Jacob Watson (jrwatson@wpi.edu)
+// Author Erik Nadel (einadel@wpi.edu) | Author Jacob Watson (jrwatson@wpi.edu)
 #include "packet.h"
 #include <vector>
 #include "router.h"
@@ -11,16 +11,36 @@ namespace EIN_JRW_Prog5{
   {
   public:
     Host(EventList* e,int id,Grid* g);
+
+    // Author Erik Nadel (einadel@wpi.edu)
     void addPacket(Packet p){packets.push_back(p);} // add packet to the host to send
+
+    //Author Jacob Watson (jrwatson@wpi.edu)
     Packet getPacket(); // Get the next packet to send
+
+    // Author Erik Nadel (einadel@wpi.edu)
     void sendPacket(int simTime); // send the next packet
+
+    //Author Jacob Watson (jrwatson@wpi.edu)
     int getNumPackets() {return packets.size();} // Get the number of packets in the host
+
+    // Author Erik Nadel (einadel@wpi.edu)
     void cycle(int simTime); // perform a cycle
-    location getLocation();
-    int getPacketsSent() {return packetsSent;}
-    void setArrivalTime(int time){arrivalTime = time;}
-    int getArrivalTime() {return arrivalTime;}
-    void identifyType() {std::cout << "Host " << std::endl;}
+
+    //Author Jacob Watson (jrwatson@wpi.edu)
+    location getLocation(); // Get the location of the host
+
+    // Author Erik Nadel (einadel@wpi.edu)
+    int getPacketsSent() {return packetsSent;} // Get the number of packets sent from the host
+
+    //Author Jacob Watson (jrwatson@wpi.edu)
+    void setArrivalTime(int time){arrivalTime = time;} // set the arrival time of the host
+
+    // Author Erik Nadel (einadel@wpi.edu)
+    int getArrivalTime() {return arrivalTime;} // Get the arrival time of the host
+
+    //Author Jacob Watson (jrwatson@wpi.edu)
+    void identifyType() {std::cout << "Host " << std::endl;} // Identify self as host
 
 
   private:
